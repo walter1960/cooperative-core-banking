@@ -145,7 +145,7 @@ export const ReportsManager: React.FC = () => {
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={handlePrint}
-            className="flex items-center gap-2 px-5 py-3 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl text-sm font-bold transition-all shadow-sm"
+            className="flex items-center gap-2 px-5 py-3 bg-coop-primary hover:opacity-90 text-white rounded-xl text-sm font-bold transition-all shadow-sm"
             title="Imprimer ou enregistrer en PDF Acrobat Reader"
           >
             <Printer className="w-4 h-4" />

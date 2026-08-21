@@ -181,7 +181,7 @@ export const CreditManager: React.FC<CreditManagerProps> = ({ members, loansMap 
                     onClick={() => setAmount(val)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
                       amount === val
-                        ? 'bg-emerald-700 text-white border-emerald-800 shadow-sm'
+                        ? 'bg-coop-primary text-white border-transparent shadow-sm'
                         : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                     }`}
                   >
@@ -195,7 +195,7 @@ export const CreditManager: React.FC<CreditManagerProps> = ({ members, loansMap 
                 onChange={(e) => setAmount(Number(e.target.value))}
                 step="50000"
                 min="100000"
-                className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-emerald-600 rounded-xl px-4 py-2.5 text-base font-mono font-bold text-slate-900"
+                className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-slate-800 rounded-xl px-4 py-2.5 text-base font-mono font-bold text-slate-900"
               />
             </div>
 
@@ -209,7 +209,7 @@ export const CreditManager: React.FC<CreditManagerProps> = ({ members, loansMap 
                   step="0.5"
                   min="1"
                   max="27"
-                  className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-emerald-600 rounded-xl px-4 py-2.5 font-mono font-bold text-slate-900"
+                  className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-slate-800 rounded-xl px-4 py-2.5 font-mono font-bold text-slate-900"
                 />
               </div>
 
@@ -218,7 +218,7 @@ export const CreditManager: React.FC<CreditManagerProps> = ({ members, loansMap 
                 <select
                   value={durationMonths}
                   onChange={(e) => setDurationMonths(Number(e.target.value))}
-                  className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-emerald-600 rounded-xl px-4 py-2.5 text-sm text-slate-900 font-semibold focus:outline-none"
+                  className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-900 font-semibold focus:outline-none"
                 >
                   {[3, 6, 9, 12, 18, 24, 36, 48, 60].map(m => (
                     <option key={m} value={m}>{m} mois ({Math.floor(m/12)} an(s) {m%12 ? `${m%12}m` : ''})</option>
@@ -232,11 +232,11 @@ export const CreditManager: React.FC<CreditManagerProps> = ({ members, loansMap 
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 text-sm">
             <div className="flex justify-between items-center text-slate-700">
               <span className="font-medium">Mensualité constante :</span>
-              <span className="font-mono font-black text-emerald-900 text-base">{monthlyPayment.toLocaleString('fr-FR')} F.CFA</span>
+              <span className="font-mono font-black text-slate-950 text-base">{monthlyPayment.toLocaleString('fr-FR')} F.CFA</span>
             </div>
             <div className="flex justify-between items-center text-slate-700">
               <span className="font-medium">Total des Intérêts :</span>
-              <span className="font-mono font-bold text-emerald-800">{totalInterest.toLocaleString('fr-FR')} F.CFA</span>
+              <span className="font-mono font-bold text-coop-primary">{totalInterest.toLocaleString('fr-FR')} F.CFA</span>
             </div>
             <div className="flex justify-between items-center text-slate-900 pt-2 border-t border-slate-200 font-bold">
               <span>Montant Global Dû :</span>
@@ -247,11 +247,11 @@ export const CreditManager: React.FC<CreditManagerProps> = ({ members, loansMap 
             <div className="pt-2 border-t border-slate-200 space-y-1">
               <div className="flex justify-between text-xs">
                 <span className="text-slate-500">Taux d'endettement estimé :</span>
-                <span className={`font-bold ${isQuotiteOk ? 'text-emerald-800' : 'text-rose-700'}`}>
+                <span className={`font-bold ${isQuotiteOk ? 'text-coop-primary' : 'text-rose-700'}`}>
                   {debtRatio}% (Max légal 33.3%)
                 </span>
               </div>
-              <div className={`text-xs font-bold ${isQuotiteOk ? 'text-emerald-800' : 'text-rose-700'}`}>
+              <div className={`text-xs font-bold ${isQuotiteOk ? 'text-coop-primary' : 'text-rose-700'}`}>
                 {isQuotiteOk ? 'Dossier Conforme : Règle des 33% respectée' : 'Dépassement de la quotité cessible autorisée'}
               </div>
             </div>
@@ -259,7 +259,7 @@ export const CreditManager: React.FC<CreditManagerProps> = ({ members, loansMap 
 
           <button 
             onClick={handleCreateLoan}
-            className="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-black py-3.5 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2"
+            className="w-full bg-coop-primary hover:opacity-90 text-white font-black py-3.5 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2"
           >
             <Landmark className="w-5 h-5" />
             <span>Valider & Octroyer le Prêt</span>
@@ -270,7 +270,7 @@ export const CreditManager: React.FC<CreditManagerProps> = ({ members, loansMap 
         <div className="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-emerald-700" />
+              <Calendar className="w-5 h-5 text-coop-primary" />
               <span>Échéancier d'Amortissement ({durationMonths} Mensualités)</span>
             </h3>
             <span className="text-xs font-mono text-slate-500 font-bold">

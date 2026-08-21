@@ -262,7 +262,7 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
             <div className="flex items-center gap-3">
               <button
                 onClick={() => window.print()}
-                className="flex items-center gap-2 px-4 py-2 bg-emerald-700 hover:bg-emerald-600 text-white font-bold rounded-xl text-xs shadow transition-all"
+                className="flex items-center gap-2 px-4 py-2 bg-coop-primary hover:opacity-90 text-white font-bold rounded-xl text-xs shadow transition-all"
               >
                 <Printer className="w-4 h-4" />
                 <span>Imprimer l'Attestation</span>
@@ -728,7 +728,7 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex items-center gap-2 px-8 py-3 bg-emerald-800 hover:bg-emerald-900 disabled:opacity-50 text-white rounded-xl font-bold text-sm shadow transition-all"
+                    className="flex items-center gap-2 px-8 py-3 bg-coop-primary hover:opacity-90 disabled:opacity-50 text-white rounded-xl font-bold text-sm shadow transition-all"
                   >
                     <UserPlus className="w-5 h-5" />
                     <span>{isSubmitting ? 'Enregistrement...' : 'Valider & Créer le Livret'}</span>

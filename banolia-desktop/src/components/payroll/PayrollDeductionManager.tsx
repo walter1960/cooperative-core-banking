@@ -129,7 +129,7 @@ export const PayrollDeductionManager: React.FC = () => {
             <button 
               onClick={handlePostBatch}
               disabled={isPosted}
-              className="flex items-center gap-2 px-6 py-3 bg-emerald-800 hover:bg-emerald-900 disabled:opacity-50 text-white rounded-xl text-sm font-bold transition-all shadow-sm"
+              className="flex items-center gap-2 px-6 py-3 bg-coop-primary hover:opacity-90 disabled:opacity-50 text-white rounded-xl text-sm font-bold transition-all shadow-sm"
             >
               <FileSpreadsheet className="w-4 h-4" />
               <span>{isPosted ? 'Bordereau Déjà Imputé' : 'Valider & Imputer le Lot'}</span>

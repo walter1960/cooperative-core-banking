@@ -210,15 +210,6 @@ export function App() {
           >
             Projets
           </button>
-
-          <span className="text-slate-600">|</span>
-
-          <button
-            onClick={() => setIsSettingsOpen(true)}
-            className="px-2.5 py-1 hover:bg-slate-800 rounded text-slate-300 hover:text-white font-semibold transition-colors"
-          >
-            Utilitaires
-          </button>
         </div>
       </header>
 
@@ -230,25 +221,25 @@ export function App() {
         <div className="flex-1 flex flex-col overflow-hidden bg-slate-100">
           
           {/* Top Module Action Bar */}
-          <div className="bg-[#29323b] text-white px-5 py-2.5 flex items-center justify-between border-b border-[#1f262d] shadow-md print:hidden">
+          <div className="bg-coop-topbar text-coop-topbar px-5 py-2.5 flex items-center justify-between border-b border-black/20 shadow-md print:hidden">
             {/* Left: Back to Home Button */}
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setActiveModule('home')}
-                className="flex items-center gap-2 bg-emerald-800 hover:bg-emerald-900 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm"
+                className="flex items-center gap-2 bg-coop-primary hover:opacity-90 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm"
                 title="Revenir à l'écran d'accueil principal"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Accueil Coopérative</span>
               </button>
 
-              <div className="flex items-center gap-2 pl-3 border-l border-slate-600">
-                <div className="p-1.5 bg-emerald-900 text-emerald-300 rounded-lg">
+              <div className="flex items-center gap-2 pl-3 border-l border-white/20">
+                <div className="p-1.5 bg-black/20 text-white rounded-lg">
                   <IconComponent className="w-4 h-4" />
                 </div>
                 <div>
                   <h2 className="text-sm font-bold text-white">{activeModuleInfo.title}</h2>
-                  <p className="text-[10px] text-slate-400">Coopérative d'Épargne et de Crédit</p>
+                  <p className="text-[10px] text-white/70">Coopérative d'Épargne et de Crédit</p>
                 </div>
               </div>
             </div>

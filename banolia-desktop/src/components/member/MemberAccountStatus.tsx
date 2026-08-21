@@ -220,7 +220,7 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
             <button
               type="button"
               onClick={handleVerifyBiometric}
-              className="flex items-center gap-1.5 bg-emerald-800 hover:bg-emerald-900 text-white px-3.5 py-2 rounded-xl font-bold text-xs shadow-sm transition-all"
+              className="flex items-center gap-1.5 bg-coop-primary hover:opacity-90 text-white px-3.5 py-2 rounded-xl font-bold text-xs shadow-sm transition-all"
             >
               <Fingerprint className="w-4 h-4" />
               <span>Vérifier Empreinte</span>
@@ -383,7 +383,7 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
             onClick={() => setActiveTab('comptes')}
             className={`py-3.5 px-6 border-r border-slate-200 transition-all ${
               activeTab === 'comptes'
-                ? 'bg-white text-slate-950 border-t-2 border-t-slate-900 shadow-sm'
+                ? 'bg-white text-coop-primary border-t-2 border-t-coop-primary shadow-sm font-bold'
                 : 'hover:bg-slate-200/60'
             }`}
           >
@@ -394,7 +394,7 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
             onClick={() => setActiveTab('cheques')}
             className={`py-3.5 px-6 border-r border-slate-200 transition-all ${
               activeTab === 'cheques'
-                ? 'bg-white text-slate-950 border-t-2 border-t-slate-900 shadow-sm'
+                ? 'bg-white text-coop-primary border-t-2 border-t-coop-primary shadow-sm font-bold'
                 : 'hover:bg-slate-200/60'
             }`}
           >
@@ -405,7 +405,7 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
             onClick={() => setActiveTab('credits')}
             className={`py-3.5 px-6 border-r border-slate-200 transition-all ${
               activeTab === 'credits'
-                ? 'bg-white text-slate-950 border-t-2 border-t-slate-900 shadow-sm'
+                ? 'bg-white text-coop-primary border-t-2 border-t-coop-primary shadow-sm font-bold'
                 : 'hover:bg-slate-200/60'
             }`}
           >
@@ -416,7 +416,7 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
             onClick={() => setActiveTab('dat')}
             className={`py-3.5 px-6 border-r border-slate-200 transition-all ${
               activeTab === 'dat'
-                ? 'bg-white text-slate-950 border-t-2 border-t-slate-900 shadow-sm'
+                ? 'bg-white text-coop-primary border-t-2 border-t-coop-primary shadow-sm font-bold'
                 : 'hover:bg-slate-200/60'
             }`}
           >
@@ -427,7 +427,7 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
             onClick={() => setActiveTab('plan_epargne')}
             className={`py-3.5 px-6 transition-all ${
               activeTab === 'plan_epargne'
-                ? 'bg-white text-slate-950 border-t-2 border-t-slate-900 shadow-sm'
+                ? 'bg-white text-coop-primary border-t-2 border-t-coop-primary shadow-sm font-bold'
                 : 'hover:bg-slate-200/60'
             }`}
           >

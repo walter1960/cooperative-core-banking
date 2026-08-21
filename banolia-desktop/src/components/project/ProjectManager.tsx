@@ -179,7 +179,7 @@ export const ProjectManager: React.FC = () => {
 
             <button
               onClick={() => setIsNewProjectModalOpen(true)}
-              className="flex items-center gap-1.5 bg-emerald-800 hover:bg-emerald-900 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm"
+              className="flex items-center gap-1.5 bg-coop-primary hover:opacity-90 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm"
             >
               <Plus className="w-4 h-4" />
               <span>Déposer un Nouveau Projet</span>
@@ -299,7 +299,7 @@ export const ProjectManager: React.FC = () => {
                 {p.status === 'APPROUVE' && (
                   <button
                     onClick={() => handleDisburseProject(p.id)}
-                    className="flex items-center gap-1.5 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm"
+                    className="flex items-center gap-1.5 bg-coop-primary hover:opacity-90 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm"
                   >
                     <Coins className="w-3.5 h-3.5" />
                     <span>Décaisser les Fonds</span>

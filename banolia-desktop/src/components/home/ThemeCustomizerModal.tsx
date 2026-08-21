@@ -1,5 +1,6 @@
 import React from 'react';
 import { Palette, RotateCcw, Check, X } from 'lucide-react';
+import { ThemeManager } from '../../services/theme/ThemeManager';
 
 export interface CooperativeTheme {
   topBarBg: string;
@@ -128,18 +129,19 @@ export const ThemeCustomizerModal: React.FC<ThemeCustomizerModalProps> = ({
   if (!isOpen) return null;
 
   const handleColorChange = (key: keyof CooperativeTheme, value: string) => {
-    onUpdateTheme({
-      ...currentTheme,
-      [key]: value
-    });
+    const updated = { ...currentTheme, [key]: value };
+    onUpdateTheme(updated);
+    ThemeManager.setTheme(updated);
   };
 
   const handleApplyPreset = (preset: CooperativeTheme) => {
     onUpdateTheme(preset);
+    ThemeManager.setTheme(preset);
   };
 
   const handleReset = () => {
     onUpdateTheme(defaultTheme);
+    ThemeManager.setTheme(defaultTheme);
   };
 
   return (
@@ -295,7 +297,7 @@ export const ThemeCustomizerModal: React.FC<ThemeCustomizerModalProps> = ({
 
           <button
             onClick={onClose}
-            className="flex items-center gap-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-sm transition-all"
+            className="flex items-center gap-1.5 bg-coop-primary hover:opacity-90 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-sm transition-all"
           >
             <Check className="w-4 h-4" />
             <span>Appliquer & Fermer</span>
