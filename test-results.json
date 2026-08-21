@@ -1,0 +1,1957 @@
+{
+  "timestamp": "2026-08-20T05:28:49.530Z",
+  "environment": {
+    "nodeVersion": "v24.18.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "summary": {
+    "total": 213,
+    "passed": 213,
+    "failed": 0,
+    "skipped": 0,
+    "passRate": "100.0%",
+    "durationMs": 2327,
+    "allTestsPassed": true,
+    "allInvariantsPassed": true,
+    "exitCode": 0
+  },
+  "tierBreakdown": {
+    "1": {
+      "name": "Tier 1: Nominal Feature Coverage",
+      "total": 90,
+      "passed": 90,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 161
+    },
+    "2": {
+      "name": "Tier 2: Boundary & Corner Cases",
+      "total": 90,
+      "passed": 90,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 120
+    },
+    "3": {
+      "name": "Tier 3: Pairwise Interactions & Race Conditions",
+      "total": 20,
+      "passed": 20,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 119
+    },
+    "4": {
+      "name": "Tier 4: Real-World Scenarios (Day-in-the-Life)",
+      "total": 10,
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 135
+    },
+    "5": {
+      "name": "Tier 5: Adversarial Gap Hardening",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 15
+    }
+  },
+  "invariants": [
+    {
+      "id": "INV_01_DOUBLE_ENTRY_EQUILIBRIUM",
+      "name": "SYSCOA-SFD Double-Entry Ledger Equilibrium (Sum(Debit) === Sum(Credit))",
+      "passed": true,
+      "details": "52 710 212 XOF == 52 710 212 XOF (Diff: 0.0000 XOF)"
+    },
+    {
+      "id": "INV_02_VOICE_LATENCY_BUDGET",
+      "name": "Multimodal Voice NLP Intent Extraction Latency Budget (< 2000ms)",
+      "passed": true,
+      "details": "Observed Max Latency: 37 ms across 65 voice operations (Budget: 2000ms)"
+    },
+    {
+      "id": "INV_03_SYNC_IDEMPOTENCY",
+      "name": "Offline Bidirectional Batch Sync Idempotency (0 Duplicate Transactions)",
+      "passed": true,
+      "details": "510 replay attempts evaluated, zero duplicate ledger state mutations"
+    },
+    {
+      "id": "INV_04_USURY_RATE_CAP",
+      "name": "BCEAO/UMOA Regulatory Usury Interest Rate Cap Enforcement (< 27.0% per annum)",
+      "passed": true,
+      "details": "All evaluated loan interest rates strictly enforced <= 27.0% BCEAO ceiling (Peak: 28.5%)"
+    }
+  ],
+  "suites": [
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f01_chart_of_accounts.js",
+      "name": "Tier 1 - F01: BCEAO Chart of Accounts & General Ledger Engine",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 15,
+      "tests": [
+        {
+          "name": "T1_F01_01: Strict Double-Entry Equilibrium on Multi-Line Journal Entry",
+          "status": "PASSED",
+          "durationMs": 12,
+          "error": null
+        },
+        {
+          "name": "T1_F01_02: 9-Class SYSCOA-SFD Chart Structure Completeness",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F01_03: General Ledger Trial Balance Balancing Property",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        },
+        {
+          "name": "T1_F01_04: Rejection of Unbalanced Journal Entries with Invariant Enforcement",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        },
+        {
+          "name": "T1_F01_05: Automated Balance Sheet Generation Equivalence (Actif == Passif)",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f02_member_management.js",
+      "name": "Tier 1 - F02: Member Management & Share Capital",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T1_F02_01: Member Registration with Share Capital & Admission Fee Posting",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F02_02: KYC Profile Identification & National ID Verification",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F02_03: Additional Share Subscription & Voting Rights Proportionality",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F02_04: Share Transfer Between Members Preserves Aggregate Capital",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F02_05: Member Status State Transitions (ACTIF -> SUSPENDU -> RADIE)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f03_savings_tontines.js",
+      "name": "Tier 1 - F03: Savings Accounts & Tontines",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T1_F03_01: Ordinary Savings Cash Deposit Credited to Account 251211",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F03_02: Ordinary Savings Cash Withdrawal with Fee Debited to Account 251211",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F03_03: 15-Day Interest Rule (Règle des Quinzaines) Calculation Accuracy",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F03_04: Daily Tontine Collection into Suspense Account 258000",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F03_05: 31-Day Tontine Cycle Settlement with 1-Day SFD Commission Auto-Deduction",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f04_loan_amortization.js",
+      "name": "Tier 1 - F04: Loan Amortization Engine & Provisioning",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 15,
+      "tests": [
+        {
+          "name": "T1_F04_01: Constant Annuity Schedule Amortization Integrity",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        },
+        {
+          "name": "T1_F04_02: Constant Principal (Linear) Schedule Mathematical Properties",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F04_03: Bullet Loan (In Fine) Amortization (Principal on Final Installment Only)",
+          "status": "PASSED",
+          "durationMs": 12,
+          "error": null
+        },
+        {
+          "name": "T1_F04_04: Flat Rate Loan Schedule Distribution",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        },
+        {
+          "name": "T1_F04_05: Loan Disbursement and Repayment Journal Postings",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f05_financial_reports.js",
+      "name": "Tier 1 - F05: Financial Statements & Prudential Ratios",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 14,
+      "tests": [
+        {
+          "name": "T1_F05_01: Balance Sheet Assets vs Liabilities Perfect Equilibrium",
+          "status": "PASSED",
+          "durationMs": 13,
+          "error": null
+        },
+        {
+          "name": "T1_F05_02: General Ledger Trial Balance Full Account Extraction",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F05_03: Global Liquidity Ratio (R_LIQ >= 100%) Verification",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F05_04: Portfolio at Risk (PAR30 <= 5% and PAR90 <= 3%) Evaluation",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F05_05: Capital Adequacy Ratio (CAR >= 15%) & Operational Self-Sufficiency (OSS >= 100%)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f06_sync_idempotency.js",
+      "name": "Tier 1 - F06: Core Sync & Idempotency Engine",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 39,
+      "tests": [
+        {
+          "name": "T1_F06_01: Generation of SHA-256 HMAC Idempotency Keys",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        },
+        {
+          "name": "T1_F06_02: Batch Sync of Offline Transactions Returns COMMITTED Status",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F06_03: Replaying Identical Idempotency Key Returns DUPLICATE without State Mutation",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F06_04: Multi-Item Batch Handles Mixed New and Duplicate Transactions",
+          "status": "PASSED",
+          "durationMs": 36,
+          "error": null
+        },
+        {
+          "name": "T1_F06_05: Idempotent Ledger Integrity Across 10 Repeated Synchronization Cycles",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f07_desktop_offline_db.js",
+      "name": "Tier 1 - F07: Desktop Offline Database & Queue",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 27,
+      "tests": [
+        {
+          "name": "T1_F07_01: Local Database Schema Initialization with 4 Core Entities",
+          "status": "PASSED",
+          "durationMs": 2,
+          "error": null
+        },
+        {
+          "name": "T1_F07_02: Offline Transaction Enqueueing into Local Outbox Queue",
+          "status": "PASSED",
+          "durationMs": 18,
+          "error": null
+        },
+        {
+          "name": "T1_F07_03: FIFO Queue Ordering Guarantees Sequential Execution",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F07_04: Fast Local Search Across Members Table by Name or Manual Number",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F07_05: Outbox Queue Item Marked ACKNOWLEDGED Upon Successful Sync",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f08_teller_operations.js",
+      "name": "Tier 1 - F08: Teller Operations & Cashier Desk",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T1_F08_01: Cash Deposit Workflow Updates Drawer and Member Balances",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F08_02: Cash Withdrawal Workflow Verifies Available Balance Threshold",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F08_03: Change Calculator Computes Exact Cash Return",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F08_04: Rejection of Cash Withdrawal Exceeding Available Balance",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F08_05: Alternative Payment Method Selection (Mobile Money at Counter)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f09_escpos_receipts.js",
+      "name": "Tier 1 - F09: ESC/POS Thermal Receipt Engine",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 38,
+      "tests": [
+        {
+          "name": "T1_F09_01: Generate 80mm Cash Deposit Thermal Receipt Stream",
+          "status": "PASSED",
+          "durationMs": 37,
+          "error": null
+        },
+        {
+          "name": "T1_F09_02: Generate 80mm Cash Withdrawal Thermal Receipt Stream",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F09_03: Generate 58mm Field Collector Portable Bluetooth Mini-Receipt",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F09_04: Verification QR Code Payload Formatting in ESC/POS Stream",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F09_05: ESC/POS Cash Drawer Kick Byte Sequence (0x1B, 0x70)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f10_biometric_auth.js",
+      "name": "Tier 1 - F10: Biometric ISO 19794-2 Authentication",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 2,
+      "tests": [
+        {
+          "name": "T1_F10_01: ISO 19794-2 Template Header Structure Validation",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F10_02: Successful 1:1 Biometric Verification Score (Score >= 85)",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        },
+        {
+          "name": "T1_F10_03: Biometric Mismatch Rejection for Non-Matching Fingers (Score < 85)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F10_04: Rejection of Corrupted Biometric Template Payload",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F10_05: Biometric Verification Security Gate Blocks Unauthorized Withdrawal",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f11_shift_balancing.js",
+      "name": "Tier 1 - F11: Cashier Shift Balancing & Billetage",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T1_F11_01: Shift Opening with Initial Vault Transfer Record",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F11_02: Physical Cash Billetage Total Breakdown Calculation",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F11_03: Perfect Shift Balancing Reconciliation (Difference == 0)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F11_04: Cash Shortage (Manquant de Caisse) Booked to Account 471200",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F11_05: Cash Overage (Excédent de Caisse) Booked to Account 472200",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f12_desktop_batch_sync.js",
+      "name": "Tier 1 - F12: Desktop Bidirectional Batch Sync Engine",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T1_F12_01: Batch Upload of 5 Offline Transactions with Server Commits",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F12_02: Incremental Delta Pull of Member Profiles since Timestamp",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F12_03: Conflict Resolution Strategy: Local Teller Physical Cash Wins",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F12_04: Vector Clock / Timestamp Convergence on Non-Conflicting Fields",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F12_05: Network Resiliency Exponential Backoff Simulation (1s -> 2s -> 4s)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f13_mobile_member_portal.js",
+      "name": "Tier 1 - F13: Mobile Member Portal & Micro-Loans",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T1_F13_01: Triple Balance Display Invariant (Avail == Real - Frozen)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F13_02: Transaction History Statement Chronological Ordering",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F13_03: Micro-Loan In-App Interactive Simulator Evaluation",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F13_04: Pre-Qualification Evaluation for Instant Digital Credit",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F13_05: Digital Account Statement Export Formatting Validation",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f14_mobile_money_gateways.js",
+      "name": "Tier 1 - F14: Mobile Money Gateways",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 2,
+      "tests": [
+        {
+          "name": "T1_F14_01: TMoney Deposit Initiation and USSD Push Confirmation",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F14_02: Flooz (Moov Togo) Cash-In Verification and Status Polling",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F14_03: Wave QR Code Direct Account Credit and General Ledger Settlement",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F14_04: MTN MoMo Withdrawal Request Initiation",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F14_05: Orange Money Gateway Webhook Idempotent Processing",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f15_field_collector.js",
+      "name": "Tier 1 - F15: Field Collector Offline Tontine Mode",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T1_F15_01: Morning Route Initialization with Assigned Market Merchants",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F15_02: Offline 1-Tap Cotisation Record & 58mm Thermal Receipt Generation",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F15_03: Daily Total Aggregation on Collector Mobile Device",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F15_04: End-of-Day Physical Cash Drop & QR Batch Verification at Agency",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F15_05: Automatic Detection of Incomplete 31-Day Tontine Cycle",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f16_voice_order_parser.js",
+      "name": "Tier 1 - F16: Voice Cashier Order Parser",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T1_F16_01: French Deposit Order Structured Intent Extraction under 2s Budget",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        },
+        {
+          "name": "T1_F16_02: French Withdrawal Order Structured Intent Extraction",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F16_03: Éwé Language Deposit Order Intent and Amount Parsing",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F16_04: Mina Language Tontine Order Intent Extraction",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F16_05: Code-Switching (French + Éwé Dialect) Order Parsing",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f17_multilingual_nlp.js",
+      "name": "Tier 1 - F17: Multilingual NLP Dialect Engine",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 0,
+      "tests": [
+        {
+          "name": "T1_F17_01: Dialect Slang Evaluation (\"kotoku deka\" == 100 000 XOF)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F17_02: Compound Dialect Number Evaluation (\"akpe blaeve vo ato\" == 25 000 XOF)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F17_03: Dialect Commercial Slang (\"demi-sac\" == 50 000 XOF)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F17_04: Language Classification (French vs Éwé vs Mina)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F17_05: TogoPhonex Phonetic Encoding Normalizes Diacritics and Accents",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "1",
+      "file": "tier1_feature_coverage/test_f18_ai_ratio_analyzer.js",
+      "name": "Tier 1 - F18: AI Financial Ratio Analyzer",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T1_F18_01: AI Diagnosis of Healthy Microfinance Prudential Position",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F18_02: AI Alert Generation on Liquidity Ratio Deficit (R_LIQ < 100%)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F18_03: AI Alert Generation on Delinquency Deterioration (PAR30 > 5%)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F18_04: Capital Adequacy Evaluation (CAR >= 15% Standard)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T1_F18_05: Natural Language Financial Status Query Response Generation",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f01_accounting_bounds.js",
+      "name": "Tier 2 - F01: Accounting Boundaries & Corner Cases",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T2_F01_01: Rejection of Journal Entry with Negative Debit or Credit Amount",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F01_02: Rejection of Journal Entry with Single Line (Minimum 2 Lines Required)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F01_03: Rejection of Non-Existent Account Number",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F01_04: Rejection of Line with Simultaneous Debit and Credit Values",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F01_05: Micro-Fractional Rounding Balance Tolerances (< 0.0001 XOF)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f02_member_limits.js",
+      "name": "Tier 2 - F02: Member Limits & Boundary Conditions",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T2_F02_01: Rejection of Member Onboarding with Zero Shares Subscribed",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F02_02: Phone Number Validation for West African Telecom Prefixes (+228, +229, +225, +221)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F02_03: Enforcement of Maximum Individual Share Ownership Ceiling (10% Statutory Cap)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F02_04: Handling Member with Special Characters in Full Name (Diacritics & Hyphens)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F02_05: Blocking Member Exit if Active Outstanding Loan Exists",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f03_savings_boundaries.js",
+      "name": "Tier 2 - F03: Savings Boundaries & Edge Conditions",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T2_F03_01: Rejection of Zero or Negative Deposit Amount",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F03_02: Attempted Withdrawal of Frozen Collateral Balance Throws Exception",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F03_03: Extreme Value Deposit (100,000,000 XOF Institutional Placement)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F03_04: 15-Day Interest Accrual with Zero Account Balance Across All Fortnights",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F03_05: Mid-Month Account Lock (Status BLOQUE) Blocks Subsequent Debits",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f04_loan_usury_cap.js",
+      "name": "Tier 2 - F04: Loan Usury Cap & Boundary Amortization",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 2,
+      "tests": [
+        {
+          "name": "T2_F04_01: Rejection of Loan Rate Exceeding BCEAO Usury Limit (> 27.0% per annum)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F04_02: Acceptance of Exact Boundary Usury Rate (27.0% Ceiling)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F04_03: Micro-Loan Boundary (1 Month Duration, 50 000 XOF Principal)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F04_04: Zero-Interest Loan Product (0.0% Promotional Rate)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F04_05: Extended Tenor Loan (60 Months / 5 Years Amortization Balance)",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f05_ratio_singularities.js",
+      "name": "Tier 2 - F05: Financial Ratio Singularities & Edge Math",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 2,
+      "tests": [
+        {
+          "name": "T2_F05_01: Zero Gross Loan Portfolio Prevents Division-by-Zero in PAR Calculation",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F05_02: Zero Operating Expenses Yields Default 100% OSS without NaN Crash",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F05_03: Extreme 100% Default Scenario (Gross Portfolio == Overdue 90)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F05_04: Negative Net Profit Impact on Capital Adequacy Ratio (CAR)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F05_05: Exact Threshold Ratio Boundary Cases (R_LIQ == 100.0%, PAR30 == 5.0%)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f06_sync_replays.js",
+      "name": "Tier 2 - F06: Sync Replays & Payload Corner Cases",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 2,
+      "tests": [
+        {
+          "name": "T2_F06_01: Empty Batch Sync Payload Returns 0 Processed Count",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F06_02: Massive 100-Item Replay Storm Deduplication (Zero Redundant Commits)",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        },
+        {
+          "name": "T2_F06_03: Replaying Same Transaction with Different Batch IDs Preserves Idempotency",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F06_04: Replay Attack Simulation with Altered Amount under Same Key",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F06_05: High-Frequency Parallel Sync Requests with Unique Keys",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f07_storage_overflow.js",
+      "name": "Tier 2 - F07: Storage Overflow & Local Corruptions",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 2,
+      "tests": [
+        {
+          "name": "T2_F07_01: Outbox Queue Handles 1,000 Offline Queued Transactions",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        },
+        {
+          "name": "T2_F07_02: Corrupted JSON Payload Recovery via Safe Deserializer",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        },
+        {
+          "name": "T2_F07_03: Stale Offline Queue Priority Elevation on Retries",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F07_04: Fatal Error Quarantine on Unrecoverable Database Write Error",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F07_05: Graceful Purging of Acknowledged Queue Records",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f08_cash_drawer_limits.js",
+      "name": "Tier 2 - F08: Cash Drawer Limits & Boundaries",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 2,
+      "tests": [
+        {
+          "name": "T2_F08_01: Cash Drawer Vault Ceiling Warning (> 5,000,000 XOF Excess)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F08_02: Exact Boundary Zero Balance Cash Drawer (All Cash Disbursed)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F08_03: Rejection of Cash Disbursal Exceeding Physical Drawer Balance",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F08_04: Negative Drawer Balance Strictly Disallowed",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F08_05: Immediate Cash Drawer Reset upon Shift Close",
+          "status": "PASSED",
+          "durationMs": 2,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f09_printer_out_of_paper.js",
+      "name": "Tier 2 - F09: Printer Out-of-Paper & Boundary Formatting",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T2_F09_01: Printer Offline Status Queues Print Job in Spooler",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F09_02: Long Member Name Auto-Wrapping in 80mm Layout (48 Column Width)",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        },
+        {
+          "name": "T2_F09_03: Special Currency Symbol and West African Diacritics Printing in ESC/POS",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F09_04: Handling Empty/Missing Optional Receipt Fields (e.g. No Spouse, No Slogan)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F09_05: Large Receipt Payload Formatting (50 Line Detailed Transaction Statement)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f10_biometric_corrupt.js",
+      "name": "Tier 2 - F10: Biometric Boundaries & Template Corruption",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T2_F10_01: Zero-Length Biometric Buffer Rejection",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F10_02: Truncated ISO 19794-2 Template Header Rejection (Missing Magic FMR\\0)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F10_03: Marginal Match Score Boundary (Score 84/100 Rejection vs Threshold 85)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F10_04: Exact Threshold Boundary Match (Score 85/100 Acceptance)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F10_05: Handling Null or Undefined Biometric Input Parameters",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f11_shift_discrepancy.js",
+      "name": "Tier 2 - F11: Shift Discrepancies & Severe Imbalances",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T2_F11_01: Massive Physical Cash Shortage (1,000,000 XOF Shortfall)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F11_02: Massive Physical Cash Surplus (500,000 XOF Overage)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F11_03: Shift Close with Zero Transactions Executed (Pure Opening == Closing)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F11_04: Discrepancy Reason Mandate Enforced When |Difference| > 0",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F11_05: Double Shift Closure Attempt Prevention (Already Closed)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f12_sync_conflicts.js",
+      "name": "Tier 2 - F12: Sync Conflicts & Multi-Device Versions",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T2_F12_01: Stale Local Version Detection on Delta Pull",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F12_02: Multiple Offline Desks Updating Same Account Concurrently",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F12_03: Handling Out-of-Order Timestamps during Batch Replay",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F12_04: Duplicate Transaction Detection Across Two Different Agencies",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F12_05: Network Interruption Recovery without Duplicate Outbox Generation",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f13_mobile_edge_cases.js",
+      "name": "Tier 2 - F13: Mobile Portal Boundaries & Concurrency",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T2_F13_01: Mobile Slider Boundary (Minimum Micro-Loan Amount: 50,000 XOF)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F13_02: Mobile Slider Upper Boundary (Maximum Micro-Loan: 5,000,000 XOF)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F13_03: Handling Member with Zero Historical Transactions",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F13_04: Rejection of Loan Application Exceeding Member Share Multiplier Ceiling",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F13_05: Session Expiration & Token Revocation Safety Check",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f14_momo_failures.js",
+      "name": "Tier 2 - F14: Mobile Money Failures & Edge Cases",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T2_F14_01: Querying Non-Existent Mobile Money Transaction Reference Returns NOT_FOUND",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F14_02: Telecom Timeout Handling (Automatic Status Reversal on Expired USSD)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F14_03: Rejection of Invalid Telecom MSISDN Phone Format",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F14_04: Handling Minimum Telecom Transaction Boundary (100 XOF)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F14_05: Handling Maximum Telecom Single Transaction Ceiling (2,000,000 XOF BCEAO Cap)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f15_collector_limits.js",
+      "name": "Tier 2 - F15: Field Collector Limits & Boundaries",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T2_F15_01: High-Volume Route Handling (300 Market Adherents in Single Offline Tour)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F15_02: Zero-Collection Route (Market Holiday / Rainstorm)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F15_03: Rejection of Tontine Daily Mise of Zero Amount",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F15_04: Handling Duplicate Offline Scan of Same Carnet on Same Day",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F15_05: Bluetooth Printer Battery Critical Status Notification",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f16_voice_phonetics.js",
+      "name": "Tier 2 - F16: Voice Phonetics & Ambient Noise",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 39,
+      "tests": [
+        {
+          "name": "T2_F16_01: Phonetic Homophone Normalization (\"saint quand mille\" -> 50,000 XOF)",
+          "status": "PASSED",
+          "durationMs": 38,
+          "error": null
+        },
+        {
+          "name": "T2_F16_02: High Ambient Market Noise Robustness (75 dB Simulation)",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        },
+        {
+          "name": "T2_F16_03: Empty Audio or Inaudible Silence Handling",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F16_04: Rapid Multi-Sentence Teller Speech Disambiguation",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F16_05: Voice Order Latency Invariant Benchmark (< 2000ms Budget)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f17_dialect_mixing.js",
+      "name": "Tier 2 - F17: Dialect Code-Switching & Edge Words",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 60,
+      "tests": [
+        {
+          "name": "T2_F17_01: West African Money Slang \"2 sacs\" Evaluation (200,000 XOF)",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        },
+        {
+          "name": "T2_F17_02: West African Money Slang \"1 brique\" Evaluation (1,000,000 XOF)",
+          "status": "PASSED",
+          "durationMs": 37,
+          "error": null
+        },
+        {
+          "name": "T2_F17_03: Complex Code-Switching (\"Versement de kotoku evee pour Tomrom\")",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F17_04: Unknown Dialect Word Fallback to Clarification State",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        },
+        {
+          "name": "T2_F17_05: TogoPhonex Phonetic Cluster Matching for \"MILDZINA\" vs \"MILZINA\"",
+          "status": "PASSED",
+          "durationMs": 21,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "2",
+      "file": "tier2_boundary_corner/test_t2_f18_ratio_anomalies.js",
+      "name": "Tier 2 - F18: Financial Ratio Anomalies & Stress Scenarios",
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T2_F18_01: Severe Liquidity Crisis Scenario (Liquid Assets 20M vs Liabilities 100M -> R_LIQ = 20%)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F18_02: Catastrophic Credit Default Spike (PAR90 = 25.0% vs Allowed 3.0%)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F18_03: Insolvent Capital Adequacy Ratio (Equity Deficit < 0 -> CAR < 0%)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F18_04: Negative Operational Self-Sufficiency (Loss-Making Period OSS = 40%)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T2_F18_05: Multi-Factor Prudential Distress Index Synthesis",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "3",
+      "file": "tier3_pairwise_race/test_t3_01_offline_vs_online_withdrawal.js",
+      "name": "Tier 3 - 01: Offline Teller vs Online Wave Withdrawal Race",
+      "passed": 2,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T3_01_01: Concurrent Withdrawal Attempts on Same Account Handled Safely",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T3_01_02: Overdraft Compensation Event Triggers Urgent Recovery Notification",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "3",
+      "file": "tier3_pairwise_race/test_t3_02_idempotency_storm.js",
+      "name": "Tier 3 - 02: Idempotency Storm (50 Concurrent Replays)",
+      "passed": 2,
+      "failed": 0,
+      "durationMs": 46,
+      "tests": [
+        {
+          "name": "T3_02_01: 50 Parallel Replay Submissions of Exact Same Transaction Payload",
+          "status": "PASSED",
+          "durationMs": 16,
+          "error": null
+        },
+        {
+          "name": "T3_02_02: Ledger Double-Entry State Integrity Remains Strictly at 1 Posting",
+          "status": "PASSED",
+          "durationMs": 30,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "3",
+      "file": "tier3_pairwise_race/test_t3_03_multi_collector_tontine.js",
+      "name": "Tier 3 - 03: Multi-Collector Concurrent Tontine Race",
+      "passed": 2,
+      "failed": 0,
+      "durationMs": 33,
+      "tests": [
+        {
+          "name": "T3_03_01: Two Collectors Record Offline Cotisation for Same Member Carnet",
+          "status": "PASSED",
+          "durationMs": 32,
+          "error": null
+        },
+        {
+          "name": "T3_03_02: Carnet Matrix Advances to Day 16 on Duplicate Same-Day Collection",
+          "status": "PASSED",
+          "durationMs": 1,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "3",
+      "file": "tier3_pairwise_race/test_t3_04_sync_network_drop_chunk.js",
+      "name": "Tier 3 - 04: Network Drop Midway Through Batch Sync",
+      "passed": 2,
+      "failed": 0,
+      "durationMs": 37,
+      "tests": [
+        {
+          "name": "T3_04_01: First 50 Items of 100-Item Batch Commit Before Network Outage",
+          "status": "PASSED",
+          "durationMs": 15,
+          "error": null
+        },
+        {
+          "name": "T3_04_02: Resuming Batch Replay Processes Remaining 50 without Duplicating First 50",
+          "status": "PASSED",
+          "durationMs": 21,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "3",
+      "file": "tier3_pairwise_race/test_t3_05_concurrent_loan_disbursement.js",
+      "name": "Tier 3 - 05: Concurrent Loan Disbursement & Collateral Lock",
+      "passed": 2,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T3_05_01: Atomic Loan Disbursement and 20% Collateral Lock Execution",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T3_05_02: Rollback of Loan Disbursement if Collateral Lock Fails",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "3",
+      "file": "tier3_pairwise_race/test_t3_06_biometric_and_voice_ordering.js",
+      "name": "Tier 3 - 06: Voice Order with Simultaneous Biometric Confirmation",
+      "passed": 2,
+      "failed": 0,
+      "durationMs": 1,
+      "tests": [
+        {
+          "name": "T3_06_01: Voice-Driven Teller Withdrawal Completed via Fingerprint Match",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T3_06_02: Voice Order Aborted on Biometric Identity Mismatch",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "3",
+      "file": "tier3_pairwise_race/test_t3_07_cashier_shift_during_sync.js",
+      "name": "Tier 3 - 07: Cashier Shift Close during Background Sync",
+      "passed": 2,
+      "failed": 0,
+      "durationMs": 0,
+      "tests": [
+        {
+          "name": "T3_07_01: Shift Close Waiting for In-Flight Outbox Queue Drain",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T3_07_02: Theoretical Balance Freezing at Time of Shift Closure Initiation",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "3",
+      "file": "tier3_pairwise_race/test_t3_08_interest_accrual_during_deposit.js",
+      "name": "Tier 3 - 08: Interest Accrual Posting during Live Deposit",
+      "passed": 2,
+      "failed": 0,
+      "durationMs": 0,
+      "tests": [
+        {
+          "name": "T3_08_01: Concurrent Deposit and Fortnightly Interest Calculation Order",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T3_08_02: General Ledger Interest Expense Double-Entry Posting (Dr 602000 / Cr 251211)",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "3",
+      "file": "tier3_pairwise_race/test_t3_09_momo_callback_vs_poll.js",
+      "name": "Tier 3 - 09: Mobile Money Webhook vs Polling Race",
+      "passed": 2,
+      "failed": 0,
+      "durationMs": 0,
+      "tests": [
+        {
+          "name": "T3_09_01: Simultaneous Webhook Receipt and Client Status Poll on Same Tx",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T3_09_02: Webhook Dedup Protects Against Multiple Credit Attempts",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "3",
+      "file": "tier3_pairwise_race/test_t3_10_member_profile_conflict.js",
+      "name": "Tier 3 - 10: Member Profile Multi-Device Conflict",
+      "passed": 2,
+      "failed": 0,
+      "durationMs": 0,
+      "tests": [
+        {
+          "name": "T3_10_01: Field Collector Phone Update Merges with Back-Office Address Modification",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        },
+        {
+          "name": "T3_10_02: Conflicting Same-Field Edit Resolved by Higher Timestamp Rule",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "4",
+      "file": "tier4_real_world/test_t4_01_complete_agency_banking_day.js",
+      "name": "Tier 4 - 01: Complete Agency Banking Day Simulation",
+      "passed": 1,
+      "failed": 0,
+      "durationMs": 4,
+      "tests": [
+        {
+          "name": "T4_01: End-to-End Simulation of Full Agency Shift with Offline Period and Reconciliation",
+          "status": "PASSED",
+          "durationMs": 4,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "4",
+      "file": "tier4_real_world/test_t4_02_market_tontine_round.js",
+      "name": "Tier 4 - 02: Market Tontine Collector Tour Simulation",
+      "passed": 1,
+      "failed": 0,
+      "durationMs": 22,
+      "tests": [
+        {
+          "name": "T4_02: Full Day Field Collector Route with 120 Receipts and Agency Settlement",
+          "status": "PASSED",
+          "durationMs": 22,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "4",
+      "file": "tier4_real_world/test_t4_03_loan_lifecycle_eod.js",
+      "name": "Tier 4 - 03: Complete Loan Lifecycle Simulation",
+      "passed": 1,
+      "failed": 0,
+      "durationMs": 43,
+      "tests": [
+        {
+          "name": "T4_03: Full Loan Lifecycle from Member Onboarding to Complete Payoff",
+          "status": "PASSED",
+          "durationMs": 43,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "4",
+      "file": "tier4_real_world/test_t4_04_mobile_money_ecosystem.js",
+      "name": "Tier 4 - 04: Multi-Provider Telecom Ecosystem Simulation",
+      "passed": 1,
+      "failed": 0,
+      "durationMs": 33,
+      "tests": [
+        {
+          "name": "T4_04: Tripartite Telecom Flow Across Wave, TMoney and Flooz",
+          "status": "PASSED",
+          "durationMs": 33,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "4",
+      "file": "tier4_real_world/test_t4_05_regulatory_audit_reporting.js",
+      "name": "Tier 4 - 05: Regulatory Audit & Prudential Inspection Bundle",
+      "passed": 1,
+      "failed": 0,
+      "durationMs": 0,
+      "tests": [
+        {
+          "name": "T4_05: Generation of Comprehensive BCEAO Audit Bundle with 5 Ratios and Bilan",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "4",
+      "file": "tier4_real_world/test_t4_06_voice_cashier_rush_hour.js",
+      "name": "Tier 4 - 06: Voice Cashier Rush Hour High-Throughput Stream",
+      "passed": 1,
+      "failed": 0,
+      "durationMs": 0,
+      "tests": [
+        {
+          "name": "T4_06: 20 Consecutive Voice Orders Parsed with Strict Sub-2s Latency Budget",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "4",
+      "file": "tier4_real_world/test_t4_07_disaster_recovery_sync.js",
+      "name": "Tier 4 - 07: Disaster Recovery & Cloud State Re-Hydration",
+      "passed": 1,
+      "failed": 0,
+      "durationMs": 0,
+      "tests": [
+        {
+          "name": "T4_07: Complete Agency Terminal Database Wipe and Fresh Cloud Snapshot Restore",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "4",
+      "file": "tier4_real_world/test_t4_08_multilingual_member_journey.js",
+      "name": "Tier 4 - 08: Multilingual Member Omni-Channel Journey",
+      "passed": 1,
+      "failed": 0,
+      "durationMs": 0,
+      "tests": [
+        {
+          "name": "T4_08: End-to-End Trilingual Member Interaction across Channels",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "4",
+      "file": "tier4_real_world/test_t4_09_credit_delinquency_par.js",
+      "name": "Tier 4 - 09: Credit Delinquency Aging & PAR Provisioning",
+      "passed": 1,
+      "failed": 0,
+      "durationMs": 0,
+      "tests": [
+        {
+          "name": "T4_09: Simulation of Loan Aging Across 30d/90d/180d with Automated Provisioning Entries",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "4",
+      "file": "tier4_real_world/test_t4_10_high_volume_tontine_cycle.js",
+      "name": "Tier 4 - 10: High-Volume 31-Day Tontine Cycle Simulation",
+      "passed": 1,
+      "failed": 0,
+      "durationMs": 33,
+      "tests": [
+        {
+          "name": "T4_10: Simulation of 100 Members Completing 31-Day Tontine Cycle with Payout and SFD Income",
+          "status": "PASSED",
+          "durationMs": 33,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "5",
+      "file": "tier5_adversarial/test_t5_01_fuzz_batch_sync.js",
+      "name": "Tier 5 - 01: Adversarial Fuzzing & Batch Sync Injection",
+      "passed": 1,
+      "failed": 0,
+      "durationMs": 0,
+      "tests": [
+        {
+          "name": "T5_01: Fuzz Input Injection with Type Mutations and Extreme Integers",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "5",
+      "file": "tier5_adversarial/test_t5_02_ledger_tamper_detection.js",
+      "name": "Tier 5 - 02: Ledger Tamper Detection & Cryptographic Chaining",
+      "passed": 1,
+      "failed": 0,
+      "durationMs": 15,
+      "tests": [
+        {
+          "name": "T5_02: Transaction SHA-256 Hash Chain Integrity Verification",
+          "status": "PASSED",
+          "durationMs": 15,
+          "error": null
+        }
+      ]
+    },
+    {
+      "tier": "5",
+      "file": "tier5_adversarial/test_t5_03_timing_attack_voice.js",
+      "name": "Tier 5 - 03: Voice AI Prompt Injection & Jitter Hardening",
+      "passed": 1,
+      "failed": 0,
+      "durationMs": 0,
+      "tests": [
+        {
+          "name": "T5_03: Prompt Injection String Neutralization (\"Ignore previous instructions\")",
+          "status": "PASSED",
+          "durationMs": 0,
+          "error": null
+        }
+      ]
+    }
+  ]
+}

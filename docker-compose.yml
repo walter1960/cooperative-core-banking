@@ -1,0 +1,61 @@
+services:
+  # 1. Base de données MariaDB pour le Core Banking
+  mifos-db:
+    image: mariadb:11.4
+    container_name: banolia-db
+    restart: always
+    environment:
+      - MARIADB_ROOT_PASSWORD=banoliaroot
+      - MARIADB_USER=mifos
+      - MARIADB_PASSWORD=banoliapass
+      - MARIADB_DATABASE=fineract_tenants
+      - TZ=Africa/Lome
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - banolia-net
+
+  # 2. Moteur Core Banking Open Source (Apache Fineract)
+  fineract-server:
+    image: apache/fineract:latest
+    container_name: banolia-core
+    restart: always
+    depends_on:
+      - mifos-db
+    environment:
+      - FINERACT_HIKARI_JDBC_URL=jdbc:mariadb://banolia-db:3306/fineract_tenants
+      - FINERACT_HIKARI_USERNAME=mifos
+      - FINERACT_HIKARI_PASSWORD=banoliapass
+      - FINERACT_DEFAULT_TENANTDB_HOSTNAME=banolia-db
+      - FINERACT_DEFAULT_TENANTDB_PORT=3306
+      - FINERACT_DEFAULT_TENANTDB_UID=mifos
+      - FINERACT_DEFAULT_TENANTDB_PWD=banoliapass
+      - FINERACT_DEFAULT_TENANTDB_NAME=fineract_default
+      - TZ=Africa/Lome
+    ports:
+      - "8443:8443"
+    networks:
+      - banolia-net
+
+  # 3. Interface Web Back-Office / Guichet (Mifos X Web App)
+  mifos-web:
+    image: openmf/web-app:dev
+    container_name: banolia-web
+    restart: always
+    depends_on:
+      - fineract-server
+    environment:
+      - FINERACT_API_URL=https://localhost:8443/fineract-provider/api/v1
+    ports:
+      - "8080:80"
+    networks:
+      - banolia-net
+
+volumes:
+  db_data:
+
+networks:
+  banolia-net:
+    driver: bridge
