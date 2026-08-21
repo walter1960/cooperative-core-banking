@@ -12,7 +12,8 @@ import {
   Camera, 
   RotateCcw, 
   Edit2, 
-  Palette 
+  Palette,
+  Smartphone
 } from 'lucide-react';
 import { ThemeCustomizerModal, CooperativeTheme, defaultTheme } from './ThemeCustomizerModal';
 import { useTheme } from '../../context/ThemeContext';
@@ -32,7 +33,7 @@ interface ModuleItem {
   id: string;
   title: string;
   subtitle: string;
-  iconType: 'inscription' | 'projet' | 'epargne' | 'comptabilite' | 'caisse' | 'credit' | 'societaires' | 'prelevements';
+  iconType: 'inscription' | 'projet' | 'epargne' | 'comptabilite' | 'caisse' | 'credit' | 'societaires' | 'prelevements' | 'mobile';
 }
 
 interface CooperativeHomeScreenProps {
@@ -120,6 +121,12 @@ export const CooperativeHomeScreen: React.FC<CooperativeHomeScreenProps> = ({ on
       title: 'Prelevements',
       subtitle: 'Retenues à la source employeurs & bordereaux de paie',
       iconType: 'prelevements'
+    },
+    {
+      id: 'mobile',
+      title: 'App Mobile',
+      subtitle: 'Portail Adhérent 360°, biométrie, cartes & alertes SMS/Email',
+      iconType: 'mobile'
     }
   ];
 
@@ -169,6 +176,12 @@ export const CooperativeHomeScreen: React.FC<CooperativeHomeScreenProps> = ({ on
         return <RealisticSocietairesIcon className="w-24 h-24" />;
       case 'prelevements':
         return <RealisticPrelevementsIcon className="w-24 h-24" />;
+      case 'mobile':
+        return (
+          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-rose-600 to-rose-800 flex items-center justify-center text-white shadow-lg shadow-rose-900/30">
+            <Smartphone className="w-12 h-12" />
+          </div>
+        );
     }
   };
 

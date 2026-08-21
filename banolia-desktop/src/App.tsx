@@ -24,10 +24,11 @@ import {
   Settings,
   ShieldCheck,
   Scale,
-  Sparkles
+  Sparkles,
+  Smartphone
 } from 'lucide-react';
 
-export type ModuleType = 'home' | 'inscription' | 'projet' | 'epargne' | 'comptabilite' | 'caisse' | 'credit' | 'societaires' | 'prelevements';
+export type ModuleType = 'home' | 'inscription' | 'projet' | 'epargne' | 'comptabilite' | 'caisse' | 'credit' | 'societaires' | 'prelevements' | 'mobile';
 
 import { CooperativeHomeScreen } from './components/home/CooperativeHomeScreen';
 import { InscriptionManager } from './components/inscription/InscriptionManager';
@@ -39,6 +40,7 @@ import { CreditManager } from './components/CreditManager';
 import { MemberAccountStatus } from './components/member/MemberAccountStatus';
 import { PayrollDeductionManager } from './components/payroll/PayrollDeductionManager';
 import { CooperativeSettingsModal } from './components/settings/CooperativeSettingsModal';
+import { MobileBankingSimulator } from './components/mobile/MobileBankingSimulator';
 
 import { SearchModal } from './components/SearchModal';
 import { AccountOpeningModal } from './components/teller/AccountOpeningModal';
@@ -118,6 +120,7 @@ export function App() {
       case 'credit': return { title: 'Portefeuille Crédit & Prêts sur Salaire', icon: Landmark };
       case 'societaires': return { title: 'Situation des Comptes Adhérent 360°', icon: Users };
       case 'prelevements': return { title: 'Prélèvements à la Source & Retenues sur Salaires', icon: Building2 };
+      case 'mobile': return { title: 'Application Mobile Banking Adhérent (MyCOOPEC)', icon: Smartphone };
       default: return { title: 'Accueil Coopérative', icon: Landmark };
     }
   };
@@ -236,6 +239,20 @@ export function App() {
             }`}
           >
             Projets
+          </button>
+
+          <span className="opacity-30">|</span>
+
+          {/* App Mobile Simulator Button */}
+          <button
+            onClick={() => setActiveModule('mobile')}
+            style={getTabStyle('mobile')}
+            className={`px-3 py-1 rounded font-bold flex items-center gap-1.5 transition-all ${
+              activeModule !== 'mobile' ? 'bg-rose-600/90 text-white hover:bg-rose-600 shadow-sm' : ''
+            }`}
+          >
+            <Smartphone className="w-3.5 h-3.5" />
+            <span>App Mobile (MyCOOPEC)</span>
           </button>
         </div>
       </header>
@@ -359,6 +376,10 @@ export function App() {
 
             {activeModule === 'comptabilite' && (
               <AccountingView />
+            )}
+
+            {activeModule === 'mobile' && (
+              <MobileBankingSimulator />
             )}
           </main>
         </div>
