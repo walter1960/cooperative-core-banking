@@ -26,6 +26,7 @@ import {
 import { TellerService } from '../../services/teller/TellerService';
 import { DbMember } from '../../types/database';
 import { Member } from '../../types';
+import { useTheme } from '../../context/ThemeContext';
 
 interface InscriptionManagerProps {
   members: Member[];
@@ -38,6 +39,7 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
   onMemberCreated,
   isOnline
 }) => {
+  const { theme } = useTheme();
   // Active step in the workflow (1: Identité, 2: Emploi & DRH, 3: Parts & Cotisations)
   const [activeStep, setActiveStep] = useState<number>(1);
 
@@ -317,9 +319,10 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
           <div className="bg-white border border-slate-200 rounded-2xl p-2 shadow-sm flex items-center justify-between gap-2 text-sm font-semibold">
             <button
               onClick={() => setActiveStep(1)}
+              style={activeStep === 1 ? { backgroundColor: theme.primaryAccent, color: '#ffffff' } : {}}
               className={`flex-1 py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 transition-all ${
                 activeStep === 1 
-                  ? 'bg-slate-900 text-white font-bold shadow-sm' 
+                  ? 'font-bold shadow-sm' 
                   : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
               }`}
             >
@@ -329,9 +332,10 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
 
             <button
               onClick={() => setActiveStep(2)}
+              style={activeStep === 2 ? { backgroundColor: theme.primaryAccent, color: '#ffffff' } : {}}
               className={`flex-1 py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 transition-all ${
                 activeStep === 2 
-                  ? 'bg-slate-900 text-white font-bold shadow-sm' 
+                  ? 'font-bold shadow-sm' 
                   : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
               }`}
             >
@@ -341,9 +345,10 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
 
             <button
               onClick={() => setActiveStep(3)}
+              style={activeStep === 3 ? { backgroundColor: theme.primaryAccent, color: '#ffffff' } : {}}
               className={`flex-1 py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 transition-all ${
                 activeStep === 3 
-                  ? 'bg-slate-900 text-white font-bold shadow-sm' 
+                  ? 'font-bold shadow-sm' 
                   : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
               }`}
             >
@@ -482,7 +487,8 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
                   <button
                     type="button"
                     onClick={() => setActiveStep(2)}
-                    className="flex items-center gap-2 px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-all"
+                    style={{ backgroundColor: theme.primaryAccent, color: '#ffffff' }}
+                    className="flex items-center gap-2 px-6 py-2.5 hover:opacity-90 rounded-xl text-sm font-semibold shadow-sm transition-all"
                   >
                     <span>Étape Suivante</span>
                     <ChevronRight className="w-4 h-4" />
@@ -580,7 +586,8 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
                   <button
                     type="button"
                     onClick={() => setActiveStep(3)}
-                    className="flex items-center gap-2 px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-sm font-semibold shadow-sm transition-all"
+                    style={{ backgroundColor: theme.primaryAccent, color: '#ffffff' }}
+                    className="flex items-center gap-2 px-6 py-2.5 hover:opacity-90 rounded-xl text-sm font-semibold shadow-sm transition-all"
                   >
                     <span>Étape Suivante</span>
                     <ChevronRight className="w-4 h-4" />
@@ -612,14 +619,15 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
                           key={num}
                           type="button"
                           onClick={() => setSharesCount(num)}
+                          style={sharesCount === num ? { backgroundColor: theme.primaryAccent, borderColor: theme.primaryAccent, color: '#ffffff' } : {}}
                           className={`p-3.5 rounded-xl border text-center transition-all ${
                             sharesCount === num
-                              ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
+                              ? 'shadow-sm font-bold'
                               : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                           }`}
                         >
                           <div className="text-base font-bold">{num} Part{num > 1 ? 's' : ''}</div>
-                          <div className={`text-xs mt-0.5 ${sharesCount === num ? 'text-slate-300' : 'text-slate-500'}`}>
+                          <div className={`text-xs mt-0.5 ${sharesCount === num ? 'text-white/80' : 'text-slate-500'}`}>
                             {(num * 5000).toLocaleString('fr-FR')} F
                           </div>
                         </button>
@@ -728,7 +736,8 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex items-center gap-2 px-8 py-3 bg-coop-primary hover:opacity-90 disabled:opacity-50 text-white rounded-xl font-bold text-sm shadow transition-all"
+                    style={{ backgroundColor: theme.primaryAccent, color: '#ffffff' }}
+                    className="flex items-center gap-2 px-8 py-3 hover:opacity-90 disabled:opacity-50 text-white rounded-xl font-bold text-sm shadow transition-all"
                   >
                     <UserPlus className="w-5 h-5" />
                     <span>{isSubmitting ? 'Enregistrement...' : 'Valider & Créer le Livret'}</span>

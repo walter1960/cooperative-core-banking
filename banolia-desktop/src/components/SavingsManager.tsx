@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { PiggyBank, Calendar, Shield, Users, ArrowUpRight, CheckCircle2 } from 'lucide-react';
 import { Member } from '../types';
+import { useTheme } from '../context/ThemeContext';
 
 interface SavingsManagerProps {
   members: Member[];
 }
 
 export const SavingsManager: React.FC<SavingsManagerProps> = ({ members }) => {
+  const { theme } = useTheme();
   const [notification, setNotification] = useState<string>('');
 
   const handleAction = (title: string) => {
@@ -19,7 +21,10 @@ export const SavingsManager: React.FC<SavingsManagerProps> = ({ members }) => {
       <div className="bg-white border border-slate-200 rounded-2xl p-6 lg:p-8 shadow-sm space-y-6">
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-slate-100 rounded-xl text-coop-primary">
+            <div 
+              style={{ color: theme.primaryAccent }}
+              className="p-3 bg-slate-100 rounded-xl"
+            >
               <PiggyBank className="w-6 h-6" />
             </div>
             <div>
@@ -43,7 +48,12 @@ export const SavingsManager: React.FC<SavingsManagerProps> = ({ members }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
             <div>
-              <span className="text-xs font-bold text-coop-primary uppercase tracking-wider block">Tontine Journalière (Marché)</span>
+              <span 
+                style={{ color: theme.primaryAccent }}
+                className="text-xs font-bold uppercase tracking-wider block"
+              >
+                Tontine Journalière (Marché)
+              </span>
               <div className="text-2xl font-bold font-mono text-slate-900 mt-2">Mise fixe : 1 000 F / jour</div>
               <p className="text-xs text-slate-600 mt-2 leading-relaxed">
                 Cycle de 31 jours avec prélèvement d'une cotisation au titre de la commission du collecteur.
@@ -51,7 +61,8 @@ export const SavingsManager: React.FC<SavingsManagerProps> = ({ members }) => {
             </div>
             <button 
               onClick={() => handleAction('Nouveau Carnet Tontine Marché')}
-              className="w-full mt-4 bg-coop-primary hover:opacity-90 text-white py-3 rounded-xl text-xs font-bold transition-all shadow-sm"
+              style={{ backgroundColor: theme.primaryAccent, color: '#ffffff' }}
+              className="w-full mt-4 hover:opacity-90 py-3 rounded-xl text-xs font-bold transition-all shadow-sm"
             >
               Ouvrir un Carnet Tontine
             </button>
@@ -59,7 +70,12 @@ export const SavingsManager: React.FC<SavingsManagerProps> = ({ members }) => {
 
           <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
             <div>
-              <span className="text-xs font-bold text-coop-primary uppercase tracking-wider block">Plan Épargne Fin de Carrière</span>
+              <span 
+                style={{ color: theme.primaryAccent }}
+                className="text-xs font-bold uppercase tracking-wider block"
+              >
+                Plan Épargne Fin de Carrière
+              </span>
               <div className="text-2xl font-bold font-mono text-slate-900 mt-2">Rémunération : 5.5% / an</div>
               <p className="text-xs text-slate-600 mt-2 leading-relaxed">
                 Épargne bloquée à terme avec versements périodiques programmés et capitalisation semestrielle.
@@ -67,7 +83,8 @@ export const SavingsManager: React.FC<SavingsManagerProps> = ({ members }) => {
             </div>
             <button 
               onClick={() => handleAction('Souscription Plan Carrière')}
-              className="w-full mt-4 bg-coop-primary hover:opacity-90 text-white py-3 rounded-xl text-xs font-bold transition-all shadow-sm"
+              style={{ backgroundColor: theme.primaryAccent, color: '#ffffff' }}
+              className="w-full mt-4 hover:opacity-90 py-3 rounded-xl text-xs font-bold transition-all shadow-sm"
             >
               Souscrire un Plan Carrière
             </button>
@@ -75,7 +92,12 @@ export const SavingsManager: React.FC<SavingsManagerProps> = ({ members }) => {
 
           <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
             <div>
-              <span className="text-xs font-bold text-coop-primary uppercase tracking-wider block">Dépôt à Terme (DAT)</span>
+              <span 
+                style={{ color: theme.primaryAccent }}
+                className="text-xs font-bold uppercase tracking-wider block"
+              >
+                Dépôt à Terme (DAT)
+              </span>
               <div className="text-2xl font-bold font-mono text-slate-900 mt-2">Taux contractuel : 6.0% à 7.5%</div>
               <p className="text-xs text-slate-600 mt-2 leading-relaxed">
                 Placement de trésorerie sur 6, 12 ou 24 mois avec émission d'un contrat de dépôt officiel.
@@ -83,7 +105,8 @@ export const SavingsManager: React.FC<SavingsManagerProps> = ({ members }) => {
             </div>
             <button 
               onClick={() => handleAction('Nouveau Contrat Dépôt à Terme (DAT)')}
-              className="w-full mt-4 bg-coop-primary hover:opacity-90 text-white py-3 rounded-xl text-xs font-bold transition-all shadow-sm"
+              style={{ backgroundColor: theme.primaryAccent, color: '#ffffff' }}
+              className="w-full mt-4 hover:opacity-90 py-3 rounded-xl text-xs font-bold transition-all shadow-sm"
             >
               Nouveau Dépôt à Terme
             </button>

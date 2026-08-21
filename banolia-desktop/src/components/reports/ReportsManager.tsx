@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { StorageService } from '../../services/storage';
 import { Member, Account, LoanFile } from '../../types';
+import { useTheme } from '../../context/ThemeContext';
 
 export type ReportCategory = 
   | 'caisse'
@@ -35,6 +36,7 @@ export type ReportCategory =
   | 'multicritere';
 
 export const ReportsManager: React.FC = () => {
+  const { theme } = useTheme();
   const [activeCategory, setActiveCategory] = useState<ReportCategory>('caisse');
   const [startDate, setStartDate] = useState<string>('2026-08-01');
   const [endDate, setEndDate] = useState<string>('2026-08-31');
@@ -145,7 +147,8 @@ export const ReportsManager: React.FC = () => {
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={handlePrint}
-            className="flex items-center gap-2 px-5 py-3 bg-coop-primary hover:opacity-90 text-white rounded-xl text-sm font-bold transition-all shadow-sm"
+            style={{ backgroundColor: theme.primaryAccent, color: '#ffffff' }}
+            className="flex items-center gap-2 px-5 py-3 hover:opacity-90 text-white rounded-xl text-sm font-bold transition-all shadow-sm"
             title="Imprimer ou enregistrer en PDF Acrobat Reader"
           >
             <Printer className="w-4 h-4" />
@@ -253,9 +256,10 @@ export const ReportsManager: React.FC = () => {
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id as ReportCategory)}
+                  style={isActive ? { backgroundColor: theme.primaryAccent, borderColor: theme.primaryAccent, color: '#ffffff' } : {}}
                   className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-start gap-3 ${
                     isActive
-                      ? 'bg-slate-900 border-slate-900 text-white shadow-sm'
+                      ? 'shadow-sm font-bold'
                       : 'bg-white border-transparent hover:bg-slate-50 text-slate-700'
                   }`}
                 >

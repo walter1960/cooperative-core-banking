@@ -15,7 +15,7 @@ import {
   Palette 
 } from 'lucide-react';
 import { ThemeCustomizerModal, CooperativeTheme, defaultTheme } from './ThemeCustomizerModal';
-import { ThemeManager } from '../../services/theme/ThemeManager';
+import { useTheme } from '../../context/ThemeContext';
 
 import { 
   RealisticInscriptionIcon,
@@ -51,18 +51,8 @@ export const CooperativeHomeScreen: React.FC<CooperativeHomeScreenProps> = ({ on
     return localStorage.getItem('coop_institution_logo') || '/copectat_logo.png';
   });
 
-  // Custom Theme Colors State
-  const [theme, setTheme] = useState<CooperativeTheme>(() => {
-    const saved = localStorage.getItem('coop_custom_theme');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        return defaultTheme;
-      }
-    }
-    return defaultTheme;
-  });
+  // Custom Theme from Global Context
+  const { theme, setTheme } = useTheme();
 
   const [isEditingOrg, setIsEditingOrg] = useState(false);
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
@@ -71,7 +61,6 @@ export const CooperativeHomeScreen: React.FC<CooperativeHomeScreenProps> = ({ on
   // Save theme on change
   const handleUpdateTheme = (newTheme: CooperativeTheme) => {
     setTheme(newTheme);
-    ThemeManager.setTheme(newTheme);
   };
 
   // Session Info

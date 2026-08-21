@@ -14,6 +14,7 @@ import {
   TrendingUp
 } from 'lucide-react';
 import { Member, LoanFile } from '../types';
+import { useTheme } from '../context/ThemeContext';
 
 interface CreditManagerProps {
   members: Member[];
@@ -21,6 +22,7 @@ interface CreditManagerProps {
 }
 
 export const CreditManager: React.FC<CreditManagerProps> = ({ members, loansMap }) => {
+  const { theme } = useTheme();
   const [selectedMemberCode, setSelectedMemberCode] = useState<string>(members[0]?.code || 'A0200225');
   const [amount, setAmount] = useState<number>(1000000);
   const [interestRate, setInterestRate] = useState<number>(9.5); // % annuel
@@ -179,9 +181,10 @@ export const CreditManager: React.FC<CreditManagerProps> = ({ members, loansMap 
                     key={val}
                     type="button"
                     onClick={() => setAmount(val)}
+                    style={amount === val ? { backgroundColor: theme.primaryAccent, color: '#ffffff', borderColor: theme.primaryAccent } : {}}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
                       amount === val
-                        ? 'bg-coop-primary text-white border-transparent shadow-sm'
+                        ? 'shadow-sm'
                         : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                     }`}
                   >
@@ -259,7 +262,8 @@ export const CreditManager: React.FC<CreditManagerProps> = ({ members, loansMap 
 
           <button 
             onClick={handleCreateLoan}
-            className="w-full bg-coop-primary hover:opacity-90 text-white font-black py-3.5 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2"
+            style={{ backgroundColor: theme.primaryAccent, color: '#ffffff' }}
+            className="w-full hover:opacity-90 text-white font-black py-3.5 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2"
           >
             <Landmark className="w-5 h-5" />
             <span>Valider & Octroyer le Prêt</span>

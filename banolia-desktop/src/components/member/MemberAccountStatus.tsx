@@ -21,12 +21,14 @@ import {
 import { StorageService } from '../../services/storage';
 import { Member, Account, LoanFile } from '../../types';
 import { VirtualMemberCard } from '../card/VirtualMemberCard';
+import { useTheme } from '../../context/ThemeContext';
 
 interface MemberAccountStatusProps {
   onSelectMember?: (code: string) => void;
 }
 
 export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
+  const { theme } = useTheme();
   const [members, setMembers] = useState<Member[]>([]);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('A0200225');
@@ -220,7 +222,8 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
             <button
               type="button"
               onClick={handleVerifyBiometric}
-              className="flex items-center gap-1.5 bg-coop-primary hover:opacity-90 text-white px-3.5 py-2 rounded-xl font-bold text-xs shadow-sm transition-all"
+              style={{ backgroundColor: theme.primaryAccent, color: '#ffffff' }}
+              className="flex items-center gap-1.5 hover:opacity-90 text-white px-3.5 py-2 rounded-xl font-bold text-xs shadow-sm transition-all"
             >
               <Fingerprint className="w-4 h-4" />
               <span>Vérifier Empreinte</span>
@@ -381,9 +384,10 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
         <div className="bg-slate-100 border-b border-slate-200 flex flex-wrap text-xs font-bold text-slate-600">
           <button
             onClick={() => setActiveTab('comptes')}
+            style={activeTab === 'comptes' ? { borderTopColor: theme.primaryAccent, color: theme.primaryAccent, borderTopWidth: '3px' } : {}}
             className={`py-3.5 px-6 border-r border-slate-200 transition-all ${
               activeTab === 'comptes'
-                ? 'bg-white text-coop-primary border-t-2 border-t-coop-primary shadow-sm font-bold'
+                ? 'bg-white shadow-sm font-bold'
                 : 'hover:bg-slate-200/60'
             }`}
           >
@@ -392,9 +396,10 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
 
           <button
             onClick={() => setActiveTab('cheques')}
+            style={activeTab === 'cheques' ? { borderTopColor: theme.primaryAccent, color: theme.primaryAccent, borderTopWidth: '3px' } : {}}
             className={`py-3.5 px-6 border-r border-slate-200 transition-all ${
               activeTab === 'cheques'
-                ? 'bg-white text-coop-primary border-t-2 border-t-coop-primary shadow-sm font-bold'
+                ? 'bg-white shadow-sm font-bold'
                 : 'hover:bg-slate-200/60'
             }`}
           >
@@ -403,9 +408,10 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
 
           <button
             onClick={() => setActiveTab('credits')}
+            style={activeTab === 'credits' ? { borderTopColor: theme.primaryAccent, color: theme.primaryAccent, borderTopWidth: '3px' } : {}}
             className={`py-3.5 px-6 border-r border-slate-200 transition-all ${
               activeTab === 'credits'
-                ? 'bg-white text-coop-primary border-t-2 border-t-coop-primary shadow-sm font-bold'
+                ? 'bg-white shadow-sm font-bold'
                 : 'hover:bg-slate-200/60'
             }`}
           >
@@ -414,9 +420,10 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
 
           <button
             onClick={() => setActiveTab('dat')}
+            style={activeTab === 'dat' ? { borderTopColor: theme.primaryAccent, color: theme.primaryAccent, borderTopWidth: '3px' } : {}}
             className={`py-3.5 px-6 border-r border-slate-200 transition-all ${
               activeTab === 'dat'
-                ? 'bg-white text-coop-primary border-t-2 border-t-coop-primary shadow-sm font-bold'
+                ? 'bg-white shadow-sm font-bold'
                 : 'hover:bg-slate-200/60'
             }`}
           >
@@ -425,9 +432,10 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
 
           <button
             onClick={() => setActiveTab('plan_epargne')}
+            style={activeTab === 'plan_epargne' ? { borderTopColor: theme.primaryAccent, color: theme.primaryAccent, borderTopWidth: '3px' } : {}}
             className={`py-3.5 px-6 transition-all ${
               activeTab === 'plan_epargne'
-                ? 'bg-white text-coop-primary border-t-2 border-t-coop-primary shadow-sm font-bold'
+                ? 'bg-white shadow-sm font-bold'
                 : 'hover:bg-slate-200/60'
             }`}
           >

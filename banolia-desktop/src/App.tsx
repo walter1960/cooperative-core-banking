@@ -52,8 +52,10 @@ import { db } from './db/database';
 import { seedDatabase } from './db/seed';
 import { Member, Account, LoanFile, CashRegister } from './types';
 import { useLiveActiveShift } from './db/hooks';
+import { useTheme } from './context/ThemeContext';
 
 export function App() {
+  const { theme } = useTheme();
   const [activeModule, setActiveModule] = useState<ModuleType>('home');
   const [isOnline, setIsOnline] = useState<boolean>(true);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
@@ -123,26 +125,44 @@ export function App() {
   const activeModuleInfo = getModuleTitle();
   const IconComponent = activeModuleInfo.icon;
 
+  const getTabStyle = (moduleName: ModuleType) => {
+    if (activeModule === moduleName) {
+      return {
+        backgroundColor: theme.primaryAccent,
+        color: '#ffffff',
+        fontWeight: 'bold'
+      };
+    }
+    return {};
+  };
+
   return (
-    <div className="w-screen h-screen bg-[#333d47] flex flex-col font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden select-none">
+    <div 
+      style={{ backgroundColor: theme.canvasBg }}
+      className="w-screen h-screen flex flex-col font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden select-none"
+    >
       
-      {/* Universal Institutional Top Ribbon Menu (Always accessible) */}
-      <header className="bg-[#212830] border-b border-[#181e24] px-4 py-1.5 flex items-center justify-between text-xs text-slate-300 print:hidden z-30 select-none">
+      {/* Universal Institutional Top Ribbon Menu */}
+      <header 
+        style={{ backgroundColor: theme.topBarBg, color: theme.topBarText }}
+        className="border-b border-black/20 px-4 py-1.5 flex items-center justify-between text-xs print:hidden z-30 select-none transition-colors duration-200"
+      >
         <div className="flex items-center gap-1 overflow-x-auto py-0.5">
           <button
             onClick={() => setIsSettingsOpen(true)}
-            className="px-2.5 py-1 hover:bg-slate-800 rounded text-slate-300 hover:text-white font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-2.5 py-1 hover:bg-white/10 rounded font-semibold flex items-center gap-1.5 transition-colors"
           >
-            <Settings className="w-3.5 h-3.5 text-slate-400" />
+            <Settings className="w-3.5 h-3.5 opacity-80" />
             <span>Paramètres</span>
           </button>
 
-          <span className="text-slate-600">|</span>
+          <span className="opacity-30">|</span>
 
           <button
             onClick={() => setActiveModule('inscription')}
-            className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'inscription' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+            style={getTabStyle('inscription')}
+            className={`px-2.5 py-1 rounded font-semibold transition-all ${
+              activeModule !== 'inscription' ? 'hover:bg-white/10 opacity-90 hover:opacity-100' : ''
             }`}
           >
             Adhésion
@@ -150,8 +170,9 @@ export function App() {
 
           <button
             onClick={() => setActiveModule('societaires')}
-            className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'societaires' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+            style={getTabStyle('societaires')}
+            className={`px-2.5 py-1 rounded font-semibold transition-all ${
+              activeModule !== 'societaires' ? 'hover:bg-white/10 opacity-90 hover:opacity-100' : ''
             }`}
           >
             Situation Comptes
@@ -159,8 +180,9 @@ export function App() {
 
           <button
             onClick={() => setActiveModule('epargne')}
-            className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'epargne' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+            style={getTabStyle('epargne')}
+            className={`px-2.5 py-1 rounded font-semibold transition-all ${
+              activeModule !== 'epargne' ? 'hover:bg-white/10 opacity-90 hover:opacity-100' : ''
             }`}
           >
             Épargne
@@ -168,8 +190,9 @@ export function App() {
 
           <button
             onClick={() => setActiveModule('caisse')}
-            className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'caisse' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+            style={getTabStyle('caisse')}
+            className={`px-2.5 py-1 rounded font-semibold transition-all ${
+              activeModule !== 'caisse' ? 'hover:bg-white/10 opacity-90 hover:opacity-100' : ''
             }`}
           >
             Caisse
@@ -177,8 +200,9 @@ export function App() {
 
           <button
             onClick={() => setActiveModule('credit')}
-            className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'credit' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+            style={getTabStyle('credit')}
+            className={`px-2.5 py-1 rounded font-semibold transition-all ${
+              activeModule !== 'credit' ? 'hover:bg-white/10 opacity-90 hover:opacity-100' : ''
             }`}
           >
             Crédit
@@ -186,8 +210,9 @@ export function App() {
 
           <button
             onClick={() => setActiveModule('comptabilite')}
-            className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'comptabilite' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+            style={getTabStyle('comptabilite')}
+            className={`px-2.5 py-1 rounded font-semibold transition-all ${
+              activeModule !== 'comptabilite' ? 'hover:bg-white/10 opacity-90 hover:opacity-100' : ''
             }`}
           >
             Comptabilité
@@ -195,8 +220,9 @@ export function App() {
 
           <button
             onClick={() => setActiveModule('prelevements')}
-            className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'prelevements' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+            style={getTabStyle('prelevements')}
+            className={`px-2.5 py-1 rounded font-semibold transition-all ${
+              activeModule !== 'prelevements' ? 'hover:bg-white/10 opacity-90 hover:opacity-100' : ''
             }`}
           >
             Prélèvements
@@ -204,8 +230,9 @@ export function App() {
 
           <button
             onClick={() => setActiveModule('projet')}
-            className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'projet' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+            style={getTabStyle('projet')}
+            className={`px-2.5 py-1 rounded font-semibold transition-all ${
+              activeModule !== 'projet' ? 'hover:bg-white/10 opacity-90 hover:opacity-100' : ''
             }`}
           >
             Projets
@@ -218,15 +245,22 @@ export function App() {
         <CooperativeHomeScreen onSelectModule={handleSelectModule} />
       ) : (
         /* Workspace Screen with Clear Navigation Header */
-        <div className="flex-1 flex flex-col overflow-hidden bg-slate-100">
+        <div 
+          style={{ backgroundColor: theme.canvasBg }}
+          className="flex-1 flex flex-col overflow-hidden transition-colors duration-200"
+        >
           
           {/* Top Module Action Bar */}
-          <div className="bg-coop-topbar text-coop-topbar px-5 py-2.5 flex items-center justify-between border-b border-black/20 shadow-md print:hidden">
+          <div 
+            style={{ backgroundColor: theme.topBarBg, color: theme.topBarText }}
+            className="px-5 py-2.5 flex items-center justify-between border-b border-black/20 shadow-md print:hidden transition-colors duration-200"
+          >
             {/* Left: Back to Home Button */}
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setActiveModule('home')}
-                className="flex items-center gap-2 bg-coop-primary hover:opacity-90 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm"
+                style={{ backgroundColor: theme.primaryAccent, color: '#ffffff' }}
+                className="flex items-center gap-2 hover:opacity-90 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm"
                 title="Revenir à l'écran d'accueil principal"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -234,12 +268,15 @@ export function App() {
               </button>
 
               <div className="flex items-center gap-2 pl-3 border-l border-white/20">
-                <div className="p-1.5 bg-black/20 text-white rounded-lg">
+                <div 
+                  style={{ backgroundColor: 'rgba(0,0,0,0.25)', color: theme.topBarText }}
+                  className="p-1.5 rounded-lg"
+                >
                   <IconComponent className="w-4 h-4" />
                 </div>
                 <div>
-                  <h2 className="text-sm font-bold text-white">{activeModuleInfo.title}</h2>
-                  <p className="text-[10px] text-white/70">Coopérative d'Épargne et de Crédit</p>
+                  <h2 className="text-sm font-bold">{activeModuleInfo.title}</h2>
+                  <p className="text-[10px] opacity-75">Coopérative d'Épargne et de Crédit</p>
                 </div>
               </div>
             </div>
@@ -248,18 +285,21 @@ export function App() {
             <div className="flex items-center gap-3 text-xs">
               <button
                 onClick={() => setIsSearchOpen(true)}
-                className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+                className="flex items-center gap-2 bg-black/20 hover:bg-black/30 border border-white/20 text-white/90 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
               >
-                <Search className="w-3.5 h-3.5 text-emerald-400" />
+                <Search 
+                  style={{ color: theme.primaryAccent }}
+                  className="w-3.5 h-3.5" 
+                />
                 <span className="hidden md:inline">Recherche Sociétaire...</span>
-                <kbd className="bg-slate-900 text-slate-400 px-1.5 py-0.5 rounded text-[10px] font-mono border border-slate-700">
+                <kbd className="bg-black/40 text-white/70 px-1.5 py-0.5 rounded text-[10px] font-mono border border-white/10">
                   Ctrl+K
                 </kbd>
               </button>
 
-              <div className="hidden lg:flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-[11px] font-mono">
+              <div className="hidden lg:flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-lg border border-white/10 text-[11px] font-mono">
                 <Wallet className="w-3.5 h-3.5 text-amber-400" />
-                <span className="text-slate-400">Encaisse Caisse :</span>
+                <span className="opacity-80">Encaisse Caisse :</span>
                 <span className="font-bold text-amber-300">
                   {(activeShift ? activeShift.theoreticalClosingBalance : cashRegister.balance).toLocaleString('fr-FR')} F
                 </span>
@@ -268,7 +308,7 @@ export function App() {
           </div>
 
           {/* Module Content */}
-          <main className="flex-1 bg-slate-100 overflow-y-auto">
+          <main className="flex-1 overflow-y-auto">
             {activeModule === 'inscription' && (
               <InscriptionManager
                 members={members}
@@ -335,7 +375,7 @@ export function App() {
         }}
       />
 
-      {/* Global Parameters & Utilities Modal */}
+      {/* Global Parameters & Settings Modal */}
       <CooperativeSettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}

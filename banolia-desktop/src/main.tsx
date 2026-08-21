@@ -2,12 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
-import { ThemeManager } from './services/theme/ThemeManager';
+import { ThemeProvider } from './context/ThemeContext';
 
-// 1. Initialize and apply user's saved color theme
-ThemeManager.init();
-
-// 2. Purge any legacy hardcoded names or obsolete subtitles from localStorage
+// Purge any legacy hardcoded names or obsolete subtitles from localStorage
 try {
   const storedName = localStorage.getItem('coop_institution_name');
   if (!storedName || storedName.includes('COPECTAT')) {
@@ -24,6 +21,8 @@ try {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>
 );

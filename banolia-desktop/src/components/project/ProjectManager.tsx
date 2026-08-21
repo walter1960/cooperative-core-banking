@@ -11,6 +11,7 @@ import {
   X, 
   Printer 
 } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 
 interface ProjectRequest {
   id: string;
@@ -77,6 +78,7 @@ const initialProjects: ProjectRequest[] = [
 ];
 
 export const ProjectManager: React.FC = () => {
+  const { theme } = useTheme();
   const [projects, setProjects] = useState<ProjectRequest[]>(initialProjects);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<string>('ALL');
@@ -179,7 +181,8 @@ export const ProjectManager: React.FC = () => {
 
             <button
               onClick={() => setIsNewProjectModalOpen(true)}
-              className="flex items-center gap-1.5 bg-coop-primary hover:opacity-90 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm"
+              style={{ backgroundColor: theme.primaryAccent, color: '#ffffff' }}
+              className="flex items-center gap-1.5 hover:opacity-90 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm"
             >
               <Plus className="w-4 h-4" />
               <span>Déposer un Nouveau Projet</span>
@@ -299,7 +302,8 @@ export const ProjectManager: React.FC = () => {
                 {p.status === 'APPROUVE' && (
                   <button
                     onClick={() => handleDisburseProject(p.id)}
-                    className="flex items-center gap-1.5 bg-coop-primary hover:opacity-90 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm"
+                    style={{ backgroundColor: theme.primaryAccent, color: '#ffffff' }}
+                    className="flex items-center gap-1.5 hover:opacity-90 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm"
                   >
                     <Coins className="w-3.5 h-3.5" />
                     <span>Décaisser les Fonds</span>
@@ -427,7 +431,8 @@ export const ProjectManager: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg text-xs shadow-sm"
+                  style={{ backgroundColor: theme.primaryAccent, color: '#ffffff' }}
+                  className="px-5 py-2 hover:opacity-90 text-white font-bold rounded-lg text-xs shadow-sm"
                 >
                   Soumettre au Comité
                 </button>
