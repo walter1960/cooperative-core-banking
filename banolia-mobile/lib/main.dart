@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'core/constants/app_colors.dart';
 import 'features/auth/presentation/screens/welcome_splash_screen.dart';
 import 'features/member_portal/presentation/screens/member_dashboard_screen.dart';
+import 'features/cards/presentation/screens/cards_management_screen.dart';
+import 'features/menu/presentation/screens/full_grid_menu_screen.dart';
 import 'features/notifications/presentation/screens/notification_center_screen.dart';
 import 'features/loans/presentation/screens/loan_screens.dart';
 import 'features/loans/presentation/notifiers/loan_notifiers.dart';
@@ -103,9 +105,10 @@ class _MobileAppRootFlowState extends State<MobileAppRootFlow> {
 
     final screens = [
       // 0: Accueil
-      Scaffold(
-        appBar: AppBar(title: const Text('Accueil')),
-        body: const Center(child: Text('Vue Accueil Globale')),
+      MemberDashboardScreen(
+        onNavigateToLoanSimulator: () => setState(() => _currentNavIndex = 2),
+        onNavigateToMobileMoney: () => setState(() => _currentNavIndex = 3),
+        onNavigateToHistory: () {},
       ),
       // 1: Comptes (Photo 4)
       MemberDashboardScreen(
@@ -113,12 +116,34 @@ class _MobileAppRootFlowState extends State<MobileAppRootFlow> {
         onNavigateToMobileMoney: () => setState(() => _currentNavIndex = 3),
         onNavigateToHistory: () {},
       ),
-      // 2: Cartes & Prêts
-      LoanSimulatorScreen(notifier: _loanNotifier),
+      // 2: Cartes (Photo 3)
+      const CardsManagementScreen(),
       // 3: Virements & Mobile Money
       MobileMoneyScreen(notifier: _momoNotifier),
-      // 4: Menu / Messages
-      const NotificationCenterScreen(),
+      // 4: Menu (Photo 4)
+      FullGridMenuScreen(
+        onSelectMenuItem: (itemTitle) {
+          if (itemTitle == 'Comptes') {
+            setState(() => _currentNavIndex = 1);
+          } else if (itemTitle == 'Cartes') {
+            setState(() => _currentNavIndex = 2);
+          } else if (itemTitle == 'Virements') {
+            setState(() => _currentNavIndex = 3);
+          } else if (itemTitle == 'Simulateur de crédit') {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => LoanSimulatorScreen(notifier: _loanNotifier)),
+            );
+          } else if (itemTitle == 'Aide et Support' || itemTitle == 'Demandes et réclamations') {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const NotificationCenterScreen()),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Ouverture du service : $itemTitle')),
+            );
+          }
+        },
+      ),
     ];
 
     return Scaffold(
@@ -139,9 +164,9 @@ class _MobileAppRootFlowState extends State<MobileAppRootFlow> {
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home_outlined), activeIcon: Icon(Icons.home), label: 'Accueil'),
             BottomNavigationBarItem(icon: Icon(Icons.folder_open_outlined), activeIcon: Icon(Icons.folder), label: 'Comptes'),
-            BottomNavigationBarItem(icon: Icon(Icons.credit_card_outlined), activeIcon: Icon(Icons.credit_card), label: 'Cartes & Prêts'),
+            BottomNavigationBarItem(icon: Icon(Icons.credit_card_outlined), activeIcon: Icon(Icons.credit_card), label: 'Cartes'),
             BottomNavigationBarItem(icon: Icon(Icons.swap_horiz_rounded), label: 'Virements'),
-            BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'Menu & Alertes'),
+            BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'Menu'),
           ],
         ),
       ),

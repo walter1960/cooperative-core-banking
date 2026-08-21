@@ -21,8 +21,7 @@ class WelcomeSplashScreen extends StatefulWidget {
 class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTickerProviderStateMixin {
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
-  String _selectedLanguage = 'Français';
-  String _selectedCountry = '🇹🇬 Togo';
+  String _selectedLanguage = 'FR - Français';
 
   @override
   void initState() {
@@ -80,7 +79,7 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
               width: 44,
               height: 5,
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: const Color(0xFFCBD5E1),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -92,7 +91,7 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'Utilitaires Coopérative',
+                'Services & Utilitaires',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -100,7 +99,7 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.close, color: Colors.grey),
+                icon: const Icon(Icons.close, color: Color(0xFF64748B)),
                 onPressed: () => Navigator.pop(ctx),
               ),
             ],
@@ -118,7 +117,7 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
                   onTap: () {
                     Navigator.pop(ctx);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Taux BCEAO : 1 EUR = 655.957 XOF')),
+                      const SnackBar(content: Text('Taux officiel BCEAO : 1 EUR = 655.957 XOF')),
                     );
                   },
                 ),
@@ -132,7 +131,7 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
                   onTap: () {
                     Navigator.pop(ctx);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Service Réclamation ouvert 24/7')),
+                      const SnackBar(content: Text('Service Réclamations & Litiges ouvert')),
                     );
                   },
                 ),
@@ -146,7 +145,7 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
                   onTap: () {
                     Navigator.pop(ctx);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Contact Siège : +228 90 00 00 00')),
+                      const SnackBar(content: Text('Assistance Client : contact@cooperative.tg')),
                     );
                   },
                 ),
@@ -201,7 +200,7 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
           ),
           const SizedBox(height: 14),
 
-          // Try demo banner
+          // Institutional access button
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
@@ -210,18 +209,18 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
             ),
             child: Row(
               children: [
-                const Icon(Icons.touch_app_rounded, color: Colors.amber, size: 28),
+                const Icon(Icons.verified_user_outlined, color: Colors.white, size: 26),
                 const SizedBox(width: 12),
                 const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Essayer notre démo',
+                        'Accès Découverte',
                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                       ),
                       Text(
-                        "Plongez dans l'expérience complète",
+                        "Consultez les services sans authentification",
                         style: TextStyle(color: Colors.white70, fontSize: 11),
                       ),
                     ],
@@ -238,7 +237,7 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   ),
-                  child: const Text('Démo', style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: const Text('Ouvrir', style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
               ],
             ),
@@ -327,7 +326,7 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Background Gradient Image overlay
+          // Background Gradient
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -336,13 +335,13 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
                 colors: [
                   Color(0xFF0F172A),
                   Color(0xFF1E293B),
-                  Color(0xFF0A3022),
+                  Color(0xFF0D2818),
                 ],
               ),
             ),
           ),
 
-          // Decorative Top Right Language selector
+          // Top Right Language Selector with vector icon
           SafeArea(
             child: Align(
               alignment: Alignment.topRight,
@@ -351,19 +350,19 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withOpacity(0.35),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.white.withOpacity(0.2)),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      const Icon(Icons.language_rounded, color: Colors.white70, size: 16),
+                      const SizedBox(width: 6),
                       Text(
                         _selectedLanguage,
-                        style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                        style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
                       ),
-                      const SizedBox(width: 6),
-                      const Text('🇹🇬', style: TextStyle(fontSize: 16)),
                       const Icon(Icons.arrow_drop_down, color: Colors.white70, size: 18),
                     ],
                   ),
@@ -451,7 +450,7 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
 
                   const Spacer(flex: 2),
 
-                  // Connect Button (Red/Coral Gradient matching Photo 5)
+                  // Connect Button
                   SizedBox(
                     width: double.infinity,
                     height: 54,
@@ -484,7 +483,7 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
                     child: Column(
                       children: [
                         const Text(
-                          'Profitez de la praticité ultime avec\nles utilitaires de la Coopérative',
+                          'Accéder aux services et utilitaires\nde la Coopérative',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 12,
