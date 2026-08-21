@@ -30,7 +30,7 @@ export const CooperativeSettingsModal: React.FC<CooperativeSettingsModalProps> =
     return localStorage.getItem('coop_institution_name') || 'COOPEC';
   });
   const [institutionSub, setInstitutionSub] = useState<string>(() => {
-    return localStorage.getItem('coop_institution_sub') || "Coopérative d'Épargne et de Crédit • Système Intégré SFD";
+    return localStorage.getItem('coop_institution_sub') || "Coopérative d'Épargne et de Crédit";
   });
   const [shareValue, setShareValue] = useState<number>(5000);
   const [maxCashierLimit, setMaxCashierLimit] = useState<number>(10000000);
@@ -155,7 +155,7 @@ export const CooperativeSettingsModal: React.FC<CooperativeSettingsModalProps> =
                   type="text"
                   value={institutionSub}
                   onChange={(e) => setInstitutionSub(e.target.value)}
-                  placeholder="Ex: Coopérative d'Épargne et de Crédit • Système Intégré SFD"
+                  placeholder="Ex: Coopérative d'Épargne et de Crédit"
                   className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none"
                 />
               </div>

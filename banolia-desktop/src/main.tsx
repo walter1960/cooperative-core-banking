@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 
-// Purge any legacy hardcoded names from localStorage
+// Purge any legacy hardcoded names or obsolete subtitles from localStorage
 try {
   const storedName = localStorage.getItem('coop_institution_name');
   if (!storedName || storedName.includes('COPECTAT')) {
@@ -11,8 +11,8 @@ try {
   }
 
   const storedSub = localStorage.getItem('coop_institution_sub');
-  if (!storedSub || storedSub.includes('ASECNA') || storedSub.includes('COPECTAT')) {
-    localStorage.setItem('coop_institution_sub', "Coopérative d'Épargne et de Crédit • Système Intégré SFD");
+  if (!storedSub || storedSub.includes('ASECNA') || storedSub.includes('COPECTAT') || storedSub.includes('Système Intégré') || storedSub.includes('SFD')) {
+    localStorage.setItem('coop_institution_sub', "Coopérative d'Épargne et de Crédit");
   }
 } catch (e) {
   console.error("Storage sanitization error:", e);

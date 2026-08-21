@@ -248,7 +248,7 @@ export function App() {
                 </div>
                 <div>
                   <h2 className="text-sm font-bold text-white">{activeModuleInfo.title}</h2>
-                  <p className="text-[10px] text-slate-400">Système Intégré de Gestion Coopérative (SFD)</p>
+                  <p className="text-[10px] text-slate-400">Coopérative d'Épargne et de Crédit</p>
                 </div>
               </div>
             </div>

@@ -44,7 +44,7 @@ export const CooperativeHomeScreen: React.FC<CooperativeHomeScreenProps> = ({ on
     return localStorage.getItem('coop_institution_name') || 'COOPEC';
   });
   const [institutionSubtitle, setInstitutionSubtitle] = useState<string>(() => {
-    return localStorage.getItem('coop_institution_sub') || "Coopérative d'Épargne et de Crédit • Système Intégré SFD";
+    return localStorage.getItem('coop_institution_sub') || "Coopérative d'Épargne et de Crédit";
   });
   const [logoUrl, setLogoUrl] = useState<string>(() => {
     return localStorage.getItem('coop_institution_logo') || '/copectat_logo.png';
@@ -149,7 +149,7 @@ export const CooperativeHomeScreen: React.FC<CooperativeHomeScreenProps> = ({ on
   const handleResetDefaultLogo = () => {
     setLogoUrl('/copectat_logo.png');
     setInstitutionName('COOPEC');
-    setInstitutionSubtitle("Coopérative d'Épargne et de Crédit • Système Intégré SFD");
+    setInstitutionSubtitle("Coopérative d'Épargne et de Crédit");
     localStorage.removeItem('coop_institution_logo');
     localStorage.removeItem('coop_institution_name');
     localStorage.removeItem('coop_institution_sub');
