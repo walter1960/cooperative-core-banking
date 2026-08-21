@@ -142,7 +142,7 @@ export function App() {
           <button
             onClick={() => setActiveModule('inscription')}
             className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'inscription' ? 'bg-emerald-800 text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+              activeModule === 'inscription' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
             }`}
           >
             Adhésion
@@ -151,7 +151,7 @@ export function App() {
           <button
             onClick={() => setActiveModule('societaires')}
             className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'societaires' ? 'bg-emerald-800 text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+              activeModule === 'societaires' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
             }`}
           >
             Situation Comptes
@@ -160,7 +160,7 @@ export function App() {
           <button
             onClick={() => setActiveModule('epargne')}
             className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'epargne' ? 'bg-emerald-800 text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+              activeModule === 'epargne' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
             }`}
           >
             Épargne
@@ -169,7 +169,7 @@ export function App() {
           <button
             onClick={() => setActiveModule('caisse')}
             className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'caisse' ? 'bg-emerald-800 text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+              activeModule === 'caisse' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
             }`}
           >
             Caisse
@@ -178,7 +178,7 @@ export function App() {
           <button
             onClick={() => setActiveModule('credit')}
             className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'credit' ? 'bg-emerald-800 text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+              activeModule === 'credit' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
             }`}
           >
             Crédit
@@ -187,7 +187,7 @@ export function App() {
           <button
             onClick={() => setActiveModule('comptabilite')}
             className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'comptabilite' ? 'bg-emerald-800 text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+              activeModule === 'comptabilite' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
             }`}
           >
             Comptabilité
@@ -196,7 +196,7 @@ export function App() {
           <button
             onClick={() => setActiveModule('prelevements')}
             className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'prelevements' ? 'bg-emerald-800 text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+              activeModule === 'prelevements' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
             }`}
           >
             Prélèvements
@@ -205,7 +205,7 @@ export function App() {
           <button
             onClick={() => setActiveModule('projet')}
             className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-              activeModule === 'projet' ? 'bg-emerald-800 text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+              activeModule === 'projet' ? 'bg-coop-primary text-white font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
             }`}
           >
             Projets

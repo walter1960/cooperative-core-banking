@@ -1,10 +1,57 @@
 @import "tailwindcss";
 
+:root {
+  --coop-primary: #15803d;
+  --coop-topbar-bg: #29323b;
+  --coop-topbar-text: #ffffff;
+  --coop-sidebar-bg: #333d47;
+  --coop-sidebar-text: #f8fafc;
+  --coop-canvas-bg: #dcdfe4;
+  --coop-canvas-ribbon1: #15803d;
+  --coop-canvas-ribbon2: #29323b;
+  --coop-tile-title: #15803d;
+  --coop-tile-bg: #ffffff;
+  --coop-tile-border: #cbd5e1;
+}
+
 @layer base {
   body {
-    background-color: #f8fafc;
+    background-color: var(--coop-canvas-bg, #f8fafc);
     color: #0f172a;
   }
+}
+
+/* Custom dynamic theme utility classes */
+.bg-coop-primary {
+  background-color: var(--coop-primary) !important;
+}
+
+.text-coop-primary {
+  color: var(--coop-primary) !important;
+}
+
+.border-coop-primary {
+  border-color: var(--coop-primary) !important;
+}
+
+.bg-coop-topbar {
+  background-color: var(--coop-topbar-bg) !important;
+}
+
+.text-coop-topbar {
+  color: var(--coop-topbar-text) !important;
+}
+
+.bg-coop-sidebar {
+  background-color: var(--coop-sidebar-bg) !important;
+}
+
+.text-coop-sidebar {
+  color: var(--coop-sidebar-text) !important;
+}
+
+.bg-coop-canvas {
+  background-color: var(--coop-canvas-bg) !important;
 }
 
 /* Custom scrollbar */
@@ -58,40 +105,33 @@
     display: none !important;
   }
 
-  /* Special case: when thermal receipt modal is active, print only the receipt */
-  body.printing-thermal * {
-    visibility: hidden;
-  }
-  body.printing-thermal #thermal-receipt-area, 
-  body.printing-thermal #thermal-receipt-area * {
-    visibility: visible;
-  }
-  body.printing-thermal #thermal-receipt-area {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 80mm;
-    margin: 0;
-    padding: 0;
+  /* Keep full report page visible */
+  #report-printable-area, #passbook-print-container, .print-area {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
   }
 
-  /* Page breaks & Table printing standards */
+  /* Table formatting for A4 printer */
   table {
-    page-break-inside: auto;
-  }
-  tr {
-    page-break-inside: avoid;
-    page-break-after: auto;
-  }
-  thead {
-    display: table-header-group;
-  }
-  tfoot {
-    display: table-footer-group;
+    width: 100% !important;
+    border-collapse: collapse !important;
+    page-break-inside: auto !important;
   }
 
-  @page {
-    size: A4 portrait;
-    margin: 12mm 15mm 15mm 15mm;
+  tr {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+
+  thead {
+    display: table-header-group !important;
+  }
+
+  tfoot {
+    display: table-footer-group !important;
   }
 }

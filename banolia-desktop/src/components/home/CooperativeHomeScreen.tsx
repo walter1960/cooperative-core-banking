@@ -15,6 +15,7 @@ import {
   Palette 
 } from 'lucide-react';
 import { ThemeCustomizerModal, CooperativeTheme, defaultTheme } from './ThemeCustomizerModal';
+import { ThemeManager } from '../../services/theme/ThemeManager';
 
 import { 
   RealisticInscriptionIcon,
@@ -70,7 +71,7 @@ export const CooperativeHomeScreen: React.FC<CooperativeHomeScreenProps> = ({ on
   // Save theme on change
   const handleUpdateTheme = (newTheme: CooperativeTheme) => {
     setTheme(newTheme);
-    localStorage.setItem('coop_custom_theme', JSON.stringify(newTheme));
+    ThemeManager.setTheme(newTheme);
   };
 
   // Session Info
