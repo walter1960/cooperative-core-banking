@@ -83,7 +83,6 @@ void main() {
         loginWithPinUseCase: loginWithPinUseCase,
         biometricAuthUseCase: biometricAuthUseCase,
         logoutUseCase: logoutUseCase,
-        authRepository: authRepo,
       );
 
       expect(notifier.isAuthenticated, isFalse);

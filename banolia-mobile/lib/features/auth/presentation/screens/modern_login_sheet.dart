@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../core/constants/app_colors.dart';
 
 class ModernLoginSheet extends StatefulWidget {
-  final Function(String username, String password) onLogin;
+  final Future<({bool success, String? errorMessage, String? memberName})> Function(String username, String password) onVerifyLogin;
   final VoidCallback onBiometric;
 
   const ModernLoginSheet({
     super.key,
-    required this.onLogin,
+    required this.onVerifyLogin,
     required this.onBiometric,
   });
 
@@ -16,10 +15,12 @@ class ModernLoginSheet extends StatefulWidget {
 }
 
 class _ModernLoginSheetState extends State<ModernLoginSheet> {
-  final _usernameController = TextEditingController(text: 'issaga.gaye');
+  final _usernameController = TextEditingController(text: '130002');
   final _passwordController = TextEditingController(text: '••••••••••••');
   bool _obscurePassword = true;
   bool _rememberMe = true;
+  bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -28,9 +29,26 @@ class _ModernLoginSheetState extends State<ModernLoginSheet> {
     super.dispose();
   }
 
-  void _handleSubmit() {
-    widget.onLogin(_usernameController.text, _passwordController.text);
-    Navigator.of(context).pop();
+  Future<void> _handleSubmit() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    final res = await widget.onVerifyLogin(_usernameController.text, _passwordController.text);
+    if (!mounted) return;
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (res.success) {
+      Navigator.of(context).pop();
+    } else {
+      setState(() {
+        _errorMessage = res.errorMessage ?? "Compte introuvable ou non encore validé par votre gestionnaire.";
+      });
+    }
   }
 
   @override
@@ -104,11 +122,41 @@ class _ModernLoginSheetState extends State<ModernLoginSheet> {
                 ),
               ],
             ),
-            const SizedBox(height: 26),
+            const SizedBox(height: 20),
+
+            if (_errorMessage != null) ...[
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFEF2F2),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: const Color(0xFFF87171)),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.error_outline_rounded, color: Color(0xFFDC2626), size: 22),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        _errorMessage!,
+                        style: const TextStyle(
+                          color: Color(0xFF991B1B),
+                          fontSize: 12,
+                          height: 1.35,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
 
             // Username field
             const Text(
-              "Nom d'utilisateur / Matricule",
+              "Numéro de Matricule / Téléphone",
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
@@ -124,9 +172,10 @@ class _ModernLoginSheetState extends State<ModernLoginSheet> {
               ),
               child: TextField(
                 controller: _usernameController,
+                enabled: !_isLoading,
                 style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF0F172A)),
                 decoration: const InputDecoration(
-                  hintText: 'Ex: A0200225 ou nom.prenom',
+                  hintText: 'Ex: 130002 ou 91 23 45 67',
                   prefixIcon: Icon(Icons.person_outline_rounded, color: Color(0xFF64748B)),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
@@ -137,7 +186,7 @@ class _ModernLoginSheetState extends State<ModernLoginSheet> {
 
             // Password field
             const Text(
-              "Mot de passe",
+              "Code Secret / Mot de passe",
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
@@ -154,9 +203,10 @@ class _ModernLoginSheetState extends State<ModernLoginSheet> {
               child: TextField(
                 controller: _passwordController,
                 obscureText: _obscurePassword,
+                enabled: !_isLoading,
                 style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF0F172A)),
                 decoration: InputDecoration(
-                  hintText: 'Saisissez votre mot de passe',
+                  hintText: 'Saisissez votre code confidentiel',
                   prefixIcon: const Icon(Icons.lock_outline_rounded, color: Color(0xFF64748B)),
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -183,7 +233,7 @@ class _ModernLoginSheetState extends State<ModernLoginSheet> {
                       height: 24,
                       child: Checkbox(
                         value: _rememberMe,
-                        onChanged: (val) => setState(() => _rememberMe = val ?? true),
+                        onChanged: _isLoading ? null : (val) => setState(() => _rememberMe = val ?? true),
                         activeColor: const Color(0xFF0F172A),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                       ),
@@ -196,13 +246,15 @@ class _ModernLoginSheetState extends State<ModernLoginSheet> {
                   ],
                 ),
                 TextButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Un code OTP sera envoyé par SMS')),
-                    );
-                  },
+                  onPressed: _isLoading
+                      ? null
+                      : () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Veuillez contacter votre gestionnaire en agence pour réinitialiser vos accès.')),
+                          );
+                        },
                   child: const Text(
-                    'Mot de passe oublié ?',
+                    'Accès oublié ?',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF1E3A8A)),
                   ),
                 ),
@@ -214,32 +266,44 @@ class _ModernLoginSheetState extends State<ModernLoginSheet> {
             SizedBox(
               height: 52,
               child: ElevatedButton(
-                onPressed: _handleSubmit,
+                onPressed: _isLoading ? null : _handleSubmit,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFE11D48),
                   foregroundColor: Colors.white,
+                  disabledBackgroundColor: const Color(0xFFFDA4AF),
                   elevation: 2,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                child: const Text(
-                  'Se connecter',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
+                child: _isLoading
+                    ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : const Text(
+                        'Vérifier & Se connecter',
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
               ),
             ),
             const SizedBox(height: 12),
 
             // Or Fingerprint option
             OutlinedButton.icon(
-              onPressed: () {
-                Navigator.pop(context);
-                widget.onBiometric();
-              },
+              onPressed: _isLoading
+                  ? null
+                  : () {
+                      Navigator.pop(context);
+                      widget.onBiometric();
+                    },
               icon: const Icon(Icons.fingerprint_rounded, color: Color(0xFF0F172A)),
               label: const Text(
-                "Utiliser l'empreinte digitale",
+                "Connexion biométrique rapide",
                 style: TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 13),
               ),
               style: OutlinedButton.styleFrom(
@@ -248,52 +312,26 @@ class _ModernLoginSheetState extends State<ModernLoginSheet> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               ),
             ),
-            const SizedBox(height: 22),
+            const SizedBox(height: 20),
 
-            // Registration footer links
-            Center(
-              child: Column(
+            // Institutional Note
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFFE2E8F0)),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      const Text(
-                        "Vous n'avez pas un compte digital ? ",
-                        style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Formulaire d'activation digital")),
-                          );
-                        },
-                        child: const Text(
-                          "S'inscrire",
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFFE11D48)),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      const Text(
-                        "Vous n'êtes pas encore adhérent ? ",
-                        style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Adhésion sociétaire en ligne")),
-                          );
-                        },
-                        child: const Text(
-                          "Devenir sociétaire",
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF1E3A8A)),
-                        ),
-                      ),
-                    ],
+                  const Icon(Icons.account_balance_outlined, color: Color(0xFF1E3A8A), size: 22),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Text(
+                      "Sécurité SFD-UMOA : L'accès à l'espace mobile nécessite que votre compte ait été préalablement ouvert et validé par un gestionnaire COOPECTAT en agence.",
+                      style: TextStyle(fontSize: 11, color: Color(0xFF475569), height: 1.4),
+                    ),
                   ),
                 ],
               ),

@@ -21,7 +21,9 @@ import {
   CreditCard,
   Building,
   IdCard,
-  Sparkles
+  Sparkles,
+  Palette,
+  Wifi
 } from 'lucide-react';
 import { TellerService } from '../../services/teller/TellerService';
 import { DbMember } from '../../types/database';
@@ -34,6 +36,87 @@ interface InscriptionManagerProps {
   isOnline: boolean;
 }
 
+export interface CardVisualTheme {
+  id: string;
+  name: string;
+  previewHex: string;
+  bgClass: string;
+  cardBorder: string;
+  textPrimary: string;
+  textSecondary: string;
+  badgeBg: string;
+  chipTone: 'gold' | 'silver';
+}
+
+export const CARD_THEMES: Record<string, CardVisualTheme> = {
+  titanium: {
+    id: 'titanium',
+    name: 'Gris Platine / Titane',
+    previewHex: '#CBD5E1',
+    bgClass: 'bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300',
+    cardBorder: 'border-slate-300 shadow-xl',
+    textPrimary: 'text-slate-900',
+    textSecondary: 'text-slate-600',
+    badgeBg: 'bg-slate-300/90 text-slate-800 border-slate-400',
+    chipTone: 'gold'
+  },
+  pearl: {
+    id: 'pearl',
+    name: 'Gris Perle & Nacre',
+    previewHex: '#E2E8F0',
+    bgClass: 'bg-gradient-to-br from-zinc-50 via-slate-100 to-zinc-200',
+    cardBorder: 'border-zinc-300 shadow-xl',
+    textPrimary: 'text-zinc-900',
+    textSecondary: 'text-zinc-600',
+    badgeBg: 'bg-zinc-200 text-zinc-800 border-zinc-400',
+    chipTone: 'silver'
+  },
+  aero: {
+    id: 'aero',
+    name: 'Bleu Ciel Aéronautique',
+    previewHex: '#BAE6FD',
+    bgClass: 'bg-gradient-to-br from-sky-50 via-blue-100 to-sky-200',
+    cardBorder: 'border-sky-200 shadow-xl',
+    textPrimary: 'text-blue-950',
+    textSecondary: 'text-blue-700',
+    badgeBg: 'bg-blue-200 text-blue-900 border-blue-300',
+    chipTone: 'gold'
+  },
+  champagne: {
+    id: 'champagne',
+    name: 'Or Champagne & Sable',
+    previewHex: '#FEF08A',
+    bgClass: 'bg-gradient-to-br from-amber-50 via-amber-100 to-yellow-200',
+    cardBorder: 'border-amber-200 shadow-xl',
+    textPrimary: 'text-amber-950',
+    textSecondary: 'text-amber-800',
+    badgeBg: 'bg-amber-200 text-amber-900 border-amber-300',
+    chipTone: 'gold'
+  },
+  mint: {
+    id: 'mint',
+    name: 'Menthe & Jade Clair',
+    previewHex: '#A7F3D0',
+    bgClass: 'bg-gradient-to-br from-emerald-50 via-teal-100 to-emerald-200',
+    cardBorder: 'border-emerald-200 shadow-xl',
+    textPrimary: 'text-emerald-950',
+    textSecondary: 'text-emerald-800',
+    badgeBg: 'bg-emerald-200 text-emerald-900 border-emerald-300',
+    chipTone: 'silver'
+  },
+  rose: {
+    id: 'rose',
+    name: 'Quartz Satiné',
+    previewHex: '#FECDD3',
+    bgClass: 'bg-gradient-to-br from-rose-50 via-pink-100 to-rose-200',
+    cardBorder: 'border-rose-200 shadow-xl',
+    textPrimary: 'text-rose-950',
+    textSecondary: 'text-rose-800',
+    badgeBg: 'bg-rose-200 text-rose-900 border-rose-300',
+    chipTone: 'gold'
+  }
+};
+
 export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
   members,
   onMemberCreated,
@@ -43,10 +126,36 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
   // Active step in the workflow (1: Identité, 2: Emploi & DRH, 3: Parts & Cotisations)
   const [activeStep, setActiveStep] = useState<number>(1);
 
+  // Personnalisation des couleurs de la Carte Virtuelle
+  const [cardThemeId, setCardThemeId] = useState<string>(() => {
+    return localStorage.getItem('coop_card_theme') || 'titanium';
+  });
+  const [customCardColor, setCustomCardColor] = useState<string>(() => {
+    return localStorage.getItem('coop_card_custom_color') || '#E2E8F0';
+  });
+
+  const handleThemeSelect = (themeKey: string) => {
+    setCardThemeId(themeKey);
+    localStorage.setItem('coop_card_theme', themeKey);
+  };
+
+  const handleCustomColorChange = (hexColor: string) => {
+    setCustomCardColor(hexColor);
+    setCardThemeId('custom');
+    localStorage.setItem('coop_card_theme', 'custom');
+    localStorage.setItem('coop_card_custom_color', hexColor);
+  };
+
   // Form Fields - Clean initial states (zero hardcoded dummy values)
-  const [fullName, setFullName] = useState('');
+  const institutionName = localStorage.getItem('coop_institution_name') || 'COOPECTAT';
+  const partnerEntity = localStorage.getItem('coop_partner_entity') || 'ASECNA';
+  const defaultCity = localStorage.getItem('coop_institution_city') || 'Lomé';
+
+  const [lastName, setLastName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const fullName = `${lastName.trim().toUpperCase()} ${firstName.trim()}`.trim();
   const [phone, setPhone] = useState('');
-  const [city, setCity] = useState('Lomé');
+  const [city, setCity] = useState(defaultCity);
   const [address, setAddress] = useState('');
   const [emergencyContact, setEmergencyContact] = useState('');
 
@@ -78,33 +187,52 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
   const adhesionFees = 2000; // Frais de livret
   const totalInitialDue = totalSharesAmount + adhesionFees;
 
-  // Real-time Dynamic Two-Way Calculation for Age
+  // Real-time Dynamic Two-Way Calculation for Age (robuste et sans décalage UTC)
   const handleBirthDateChange = (dateVal: string) => {
     setBirthDate(dateVal);
     if (!dateVal) {
       setAgeInput('');
       return;
     }
-    const birth = new Date(dateVal);
-    const today = new Date();
-    let age = today.getFullYear() - birth.getFullYear();
-    const m = today.getMonth() - birth.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-      age--;
-    }
-    if (age >= 16 && age <= 100) {
-      setAgeInput(String(age));
+    const parts = dateVal.split('-');
+    if (parts.length === 3) {
+      const y = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10) - 1;
+      const d = parseInt(parts[2], 10);
+      if (!isNaN(y) && !isNaN(m) && !isNaN(d) && y >= 1900 && y <= new Date().getFullYear()) {
+        const today = new Date();
+        let age = today.getFullYear() - y;
+        const monthDiff = today.getMonth() - m;
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < d)) {
+          age--;
+        }
+        if (age >= 0 && age <= 130) {
+          setAgeInput(String(age));
+        }
+      }
     }
   };
 
   const handleAgeChange = (ageVal: string) => {
     setAgeInput(ageVal);
+    if (!ageVal) {
+      setBirthDate('');
+      return;
+    }
     const numAge = parseInt(ageVal, 10);
-    if (!isNaN(numAge) && numAge >= 16 && numAge <= 100) {
+    if (!isNaN(numAge) && numAge >= 0 && numAge <= 130) {
       const today = new Date();
       const birthYear = today.getFullYear() - numAge;
-      const approxDate = `${birthYear}-01-01`;
-      setBirthDate(approxDate);
+      let mStr = '01';
+      let dStr = '01';
+      if (birthDate) {
+        const parts = birthDate.split('-');
+        if (parts.length === 3 && parts[1] && parts[2]) {
+          mStr = parts[1];
+          dStr = parts[2];
+        }
+      }
+      setBirthDate(`${birthYear}-${mStr}-${dStr}`);
     }
   };
 
@@ -115,29 +243,54 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
       setSeniorityInput('');
       return;
     }
-    const hire = new Date(dateVal);
-    const today = new Date();
-    const diffTime = Math.abs(today.getTime() - hire.getTime());
-    const diffYears = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 365.25));
-    setSeniorityInput(String(diffYears));
+    const parts = dateVal.split('-');
+    if (parts.length === 3) {
+      const y = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10) - 1;
+      const d = parseInt(parts[2], 10);
+      if (!isNaN(y) && !isNaN(m) && !isNaN(d) && y >= 1950 && y <= new Date().getFullYear()) {
+        const today = new Date();
+        let seniority = today.getFullYear() - y;
+        const monthDiff = today.getMonth() - m;
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < d)) {
+          seniority--;
+        }
+        if (seniority >= 0) {
+          setSeniorityInput(String(seniority));
+        }
+      }
+    }
   };
 
   const handleSeniorityChange = (seniorityVal: string) => {
     setSeniorityInput(seniorityVal);
+    if (!seniorityVal) {
+      setHireDate('');
+      return;
+    }
     const numYears = parseInt(seniorityVal, 10);
-    if (!isNaN(numYears) && numYears >= 0 && numYears <= 50) {
+    if (!isNaN(numYears) && numYears >= 0 && numYears <= 60) {
       const today = new Date();
       const hireYear = today.getFullYear() - numYears;
-      const approxDate = `${hireYear}-01-01`;
-      setHireDate(approxDate);
+      let mStr = '01';
+      let dStr = '01';
+      if (hireDate) {
+        const parts = hireDate.split('-');
+        if (parts.length === 3 && parts[1] && parts[2]) {
+          mStr = parts[1];
+          dStr = parts[2];
+        }
+      }
+      setHireDate(`${hireYear}-${mStr}-${dStr}`);
     }
   };
 
   // Form Reset
   const handleResetForm = () => {
-    setFullName('');
+    setLastName('');
+    setFirstName('');
     setPhone('');
-    setCity('Lomé');
+    setCity(defaultCity);
     setAddress('');
     setEmergencyContact('');
     setBirthDate('');
@@ -157,8 +310,8 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
     e.preventDefault();
     setErrorMsg('');
 
-    if (!fullName.trim()) {
-      setErrorMsg('Veuillez renseigner le Nom & Prénom(s) du sociétaire.');
+    if (!lastName.trim() || !firstName.trim()) {
+      setErrorMsg('Veuillez renseigner distinctement le Nom et le(s) Prénom(s) du sociétaire.');
       setActiveStep(1);
       return;
     }
@@ -170,6 +323,7 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
     }
 
     setIsSubmitting(true);
+    const currentManager = localStorage.getItem('coop_account_manager_name') || 'ADMINISTRATEUR';
     try {
       const res = await TellerService.createMemberWithAccounts({
         fullName: fullName.trim().toUpperCase(),
@@ -186,7 +340,7 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
         sharesCount: Number(sharesCount),
         initialDepositAmount: 0,
         cashierId: 'CSH-001',
-        cashierName: 'ADMINISTRATEUR (CSH-001)',
+        cashierName: `${currentManager} (CSH-001)`,
         agencyCode: 'A01',
         isOnline
       });
@@ -372,24 +526,50 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
                 </div>
 
                 <div className="space-y-4">
-                  {/* Full Name */}
-                  <div>
-                    <label className="block text-slate-800 font-semibold mb-1.5 text-sm">
-                      Nom & Prénom(s) complets *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      autoFocus
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      placeholder="Ex: KODJO Koffi Jean-Baptiste"
-                      className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-slate-800 rounded-xl px-4 py-3 text-base font-bold text-slate-900 focus:outline-none transition-all"
-                    />
+                  {/* Nom à part et Prénoms à part */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-slate-800 font-bold mb-1.5 text-sm">
+                        Nom de Famille *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        autoFocus
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        placeholder="Ex: MILDZINA"
+                        className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-slate-800 rounded-xl px-4 py-3 text-base font-bold text-slate-900 uppercase focus:outline-none transition-all"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-800 font-bold mb-1.5 text-sm">
+                        Prénom(s) *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        placeholder="Ex: Tomrom Didier"
+                        className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-slate-800 rounded-xl px-4 py-3 text-base font-bold text-slate-900 focus:outline-none transition-all"
+                      />
+                    </div>
                   </div>
 
-                  {/* Age & BirthDate Auto Sync */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                  {/* Aperçu en direct */}
+                  {(lastName || firstName) && (
+                    <div className="px-4 py-2.5 bg-slate-100/90 rounded-xl border border-slate-200 text-xs flex items-center justify-between text-slate-700 animate-in fade-in">
+                      <span className="font-semibold text-slate-500">Intitulé officiel sociétaire :</span>
+                      <span className="font-bold text-slate-900 font-mono text-sm tracking-wide">
+                        {fullName}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Date de Naissance & Âge */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-slate-800 font-semibold mb-1.5 text-sm flex items-center justify-between">
                         <span>Date de Naissance *</span>
@@ -400,19 +580,25 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
                         required
                         value={birthDate}
                         onChange={(e) => handleBirthDateChange(e.target.value)}
-                        className="w-full bg-white border border-slate-300 focus:border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 font-medium focus:outline-none"
+                        className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-slate-800 rounded-xl px-3.5 py-3 text-sm text-slate-900 font-semibold focus:outline-none"
                       />
                     </div>
 
-                    <div className="flex flex-col justify-between">
+                    <div>
                       <label className="block text-slate-800 font-semibold mb-1.5 text-sm">
-                        Âge Actuel (Calculé Automatiquement)
+                        Âge (ans) *
                       </label>
-                      <div className="bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-mono font-bold text-slate-900 flex items-center justify-between">
-                        <span>{ageInput ? `${ageInput} ans` : 'Sélectionnez la date'}</span>
-                        <span className="text-[10px] uppercase font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
-                          Temps Réel
-                        </span>
+                      <div className="relative">
+                        <input
+                          type="number"
+                          min="1"
+                          max="120"
+                          value={ageInput}
+                          onChange={(e) => handleAgeChange(e.target.value)}
+                          placeholder="Ex: 35"
+                          className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-slate-800 rounded-xl pl-4 pr-14 py-3 text-sm font-mono font-bold text-slate-900 focus:outline-none"
+                        />
+                        <span className="absolute right-3.5 top-3.5 text-xs font-bold text-slate-400">ans</span>
                       </div>
                     </div>
                   </div>
@@ -512,14 +698,14 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-slate-800 font-semibold mb-1.5 text-sm">
-                        Matricule Employé / DRH
+                        Matricule Employé {partnerEntity ? `(${partnerEntity})` : ''}
                       </label>
                       <input
                         type="text"
                         autoFocus
                         value={employeeId}
                         onChange={(e) => setEmployeeId(e.target.value)}
-                        placeholder="Ex: EMP-4081 / MAT-102"
+                        placeholder="Ex: 130049"
                         className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-slate-800 rounded-xl px-4 py-3 text-sm font-mono font-bold text-slate-900 focus:outline-none"
                       />
                     </div>
@@ -538,8 +724,8 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
                     </div>
                   </div>
 
-                  {/* Seniority & Hire Date Dual Sync */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                  {/* Date d'Embauche & Ancienneté */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-slate-800 font-semibold mb-1.5 text-sm flex items-center justify-between">
                         <span>Date d'Embauche</span>
@@ -549,14 +735,13 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
                         type="date"
                         value={hireDate}
                         onChange={(e) => handleHireDateChange(e.target.value)}
-                        className="w-full bg-white border border-slate-300 focus:border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 font-medium focus:outline-none"
+                        className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-slate-800 rounded-xl px-3.5 py-3 text-sm text-slate-900 font-medium focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-slate-800 font-semibold mb-1.5 text-sm flex items-center justify-between">
-                        <span>Ancienneté Calculée</span>
-                        <span className="text-xs text-slate-500 font-semibold">Synchronisé</span>
+                      <label className="block text-slate-800 font-semibold mb-1.5 text-sm">
+                        Ancienneté (ans)
                       </label>
                       <div className="relative">
                         <input
@@ -566,9 +751,9 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
                           value={seniorityInput}
                           onChange={(e) => handleSeniorityChange(e.target.value)}
                           placeholder="Ex: 5"
-                          className="w-full bg-white border border-slate-300 focus:border-slate-800 rounded-xl pl-4 pr-14 py-2.5 text-sm font-mono font-bold text-slate-900 focus:outline-none"
+                          className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-slate-800 rounded-xl pl-4 pr-14 py-3 text-sm font-mono font-bold text-slate-900 focus:outline-none"
                         />
-                        <span className="absolute right-3.5 top-2.5 text-xs font-semibold text-slate-400">ans</span>
+                        <span className="absolute right-3.5 top-3.5 text-xs font-semibold text-slate-400">ans</span>
                       </div>
                     </div>
                   </div>
@@ -687,14 +872,14 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
                         <div className="font-bold flex items-center justify-between text-sm">
                           <div className="flex items-center gap-2">
                             <Building2 className="w-4 h-4 text-slate-700" />
-                            <span>Prélèvement DRH</span>
+                            <span>Prélèvement</span>
                           </div>
                           <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${isPayrollDeduction ? 'border-slate-900 bg-slate-900' : 'border-slate-300'}`}>
                             {isPayrollDeduction && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                           </div>
                         </div>
                         <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
-                          Inclus automatiquement chaque fin de mois dans le bordereau DRH.
+                          Inclus automatiquement chaque fin de mois dans le bordereau de prélèvement.
                         </p>
                       </button>
 
@@ -748,65 +933,189 @@ export const InscriptionManager: React.FC<InscriptionManagerProps> = ({
           </form>
         </div>
 
-        {/* Right Column (5 Cols): Live Member Card - Clean Executive Dark Slate */}
-        <div className="lg:col-span-5 space-y-6">
-          {/* Live Virtual Member Card */}
-          <div className="bg-[#0f172a] text-white rounded-2xl p-6 shadow-xl border border-slate-800 relative overflow-hidden space-y-5">
-            {/* Top Header */}
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3.5">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span className="text-xs font-semibold tracking-wider text-slate-300 uppercase">
-                  Carte Sociétaire • Aperçu Direct
-                </span>
+        {/* Right Column (5 Cols): Vraie Carte Virtuelle Lumineuse & Configurable */}
+        <div className="lg:col-span-5 space-y-4">
+          
+          {/* Barre de Personnalisation des Couleurs de la Carte */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-3.5 shadow-sm space-y-2.5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-800">
+                <Palette className="w-4 h-4 text-coop-primary" />
+                <span>Personnaliser la Couleur de la Carte :</span>
               </div>
-              <span className="font-mono text-[11px] bg-slate-800 text-slate-300 px-2.5 py-0.5 rounded-md border border-slate-700 font-semibold">
-                EN COURS
+              <span className="text-[10px] font-mono font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                {cardThemeId === 'custom' ? 'Sur-mesure' : (CARD_THEMES[cardThemeId]?.name || 'Gris Titane')}
               </span>
             </div>
 
-            {/* Member Identity & Dynamic Avatar */}
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-lg font-bold text-slate-200 shadow-sm">
-                {fullName.trim() ? fullName.slice(0, 2).toUpperCase() : '--'}
-              </div>
+            {/* Thèmes prédéfinis lumineux & Color Picker */}
+            <div className="flex items-center gap-2 flex-wrap">
+              {Object.values(CARD_THEMES).map((thm) => (
+                <button
+                  key={thm.id}
+                  type="button"
+                  onClick={() => handleThemeSelect(thm.id)}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold border transition-all ${
+                    cardThemeId === thm.id
+                      ? 'ring-2 ring-coop-primary ring-offset-1 border-slate-400 bg-slate-50 shadow-sm'
+                      : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'
+                  }`}
+                  title={thm.name}
+                >
+                  <span
+                    className="w-3.5 h-3.5 rounded-full border border-slate-400/60 shadow-inner inline-block"
+                    style={{ backgroundColor: thm.previewHex }}
+                  />
+                  <span>{thm.name.split(' ')[0]}</span>
+                </button>
+              ))}
 
-              <div className="flex-1 min-w-0">
-                <h3 className="text-base font-bold text-white truncate">
-                  {fullName.trim() ? fullName.toUpperCase() : 'NOM & PRÉNOM DU SOCIÉTAIRE'}
-                </h3>
-                <p className="text-xs text-slate-400 truncate mt-0.5">
-                  {position.trim() ? position : 'Fonction non renseignée'}
-                </p>
-                <div className="flex items-center gap-2.5 text-xs text-slate-400 mt-1">
-                  {employeeId && <span className="font-mono text-slate-300 font-semibold">Mat: {employeeId}</span>}
-                  {ageInput && <span>• {ageInput} ans</span>}
-                  {seniorityInput && <span>• {seniorityInput} ans d'anc.</span>}
+              {/* Sélecteur de couleur personnalisée */}
+              <label 
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold border cursor-pointer transition-all ${
+                  cardThemeId === 'custom'
+                    ? 'ring-2 ring-coop-primary ring-offset-1 border-slate-400 bg-slate-50 shadow-sm'
+                    : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'
+                }`}
+                title="Choisir une couleur libre"
+              >
+                <input
+                  type="color"
+                  value={customCardColor}
+                  onChange={(e) => handleCustomColorChange(e.target.value)}
+                  className="w-3.5 h-3.5 rounded-full border-0 p-0 cursor-pointer overflow-hidden"
+                />
+                <span>Libre</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Vraie Carte Virtuelle Réaliste (Format Standard ISO ID-1 - Lumineuse & Pas Sombre) */}
+          {(() => {
+            const activeThm = CARD_THEMES[cardThemeId] || CARD_THEMES.titanium;
+            const isCustom = cardThemeId === 'custom';
+
+            return (
+              <div
+                style={isCustom ? { backgroundColor: customCardColor } : undefined}
+                className={`relative w-full aspect-[1.586/1] rounded-3xl p-5 sm:p-6 shadow-2xl border-2 overflow-hidden flex flex-col justify-between select-none transition-all duration-300 ${
+                  isCustom
+                    ? 'border-slate-300 text-slate-900 shadow-xl'
+                    : `${activeThm.bgClass} ${activeThm.cardBorder} ${activeThm.textPrimary}`
+                }`}
+              >
+                {/* Reflet verre & trame de sécurité guillochée */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/35 via-transparent to-black/5 pointer-events-none" />
+                <div className="absolute inset-0 bg-[radial-gradient(#64748b_1px,transparent_1px)] [background-size:18px_18px] opacity-15 pointer-events-none" />
+
+                {/* Ligne 1 : En-tête Institutionnel & Sans Contact NFC */}
+                <div className="relative z-10 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-md">
+                      <Building2 className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="text-xs font-black tracking-widest uppercase block drop-shadow-sm">
+                        {institutionName} • {partnerEntity || 'SOCIÉTAIRE'}
+                      </span>
+                      <span className="text-[9px] font-bold tracking-wider block uppercase opacity-75">
+                        Carte de Sociétaire Officielle
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Wifi className="w-5 h-5 rotate-90 opacity-75" />
+                    <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border shadow-sm ${
+                      isCustom ? 'bg-white/80 text-slate-900 border-slate-300' : activeThm.badgeBg
+                    }`}>
+                      SMART-PASS
+                    </span>
+                  </div>
+                </div>
+
+                {/* Ligne 2 : Puce EMV Dorée Réaliste & Matricule / Avatar */}
+                <div className="relative z-10 flex items-center justify-between my-auto">
+                  {/* Puce Contact EMV Métallique */}
+                  <div className="flex items-center gap-3">
+                    {activeThm.chipTone === 'silver' ? (
+                      <div className="w-12 h-9 rounded-lg bg-gradient-to-tr from-slate-200 via-white to-slate-300 border border-slate-400 shadow-md flex flex-col justify-around p-1">
+                        <div className="w-full h-px bg-slate-500/50" />
+                        <div className="w-full h-px bg-slate-500/50" />
+                        <div className="w-full h-px bg-slate-500/50" />
+                      </div>
+                    ) : (
+                      <div className="w-12 h-9 rounded-lg bg-gradient-to-tr from-amber-300 via-yellow-100 to-amber-400 border border-amber-400 shadow-md flex flex-col justify-around p-1">
+                        <div className="w-full h-px bg-amber-600/50" />
+                        <div className="w-full h-px bg-amber-600/50" />
+                        <div className="w-full h-px bg-amber-600/50" />
+                      </div>
+                    )}
+                    <span className="text-[9px] font-mono font-bold uppercase tracking-wider opacity-60">
+                      NFC SANS CONTACT
+                    </span>
+                  </div>
+
+                  {/* Matricule & Initiales */}
+                  <div className="flex items-center gap-2.5">
+                    <div className="text-right">
+                      <span className="text-[8px] uppercase tracking-wider block font-bold opacity-75">
+                        Matricule {partnerEntity ? `(${partnerEntity})` : ''}
+                      </span>
+                      <span className="text-xs font-mono font-black bg-white/75 px-2 py-0.5 rounded border border-slate-300/80 shadow-sm">
+                        {employeeId || '130049'}
+                      </span>
+                    </div>
+                    <div className="w-10 h-10 rounded-xl bg-slate-900 text-white font-black flex items-center justify-center text-sm shadow-md">
+                      {fullName.trim() ? fullName.slice(0, 2).toUpperCase() : '--'}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Ligne 3 : Numéro de Carte Embossé à 16 chiffres */}
+                <div className="relative z-10 font-mono text-base sm:text-lg tracking-widest font-black drop-shadow-sm">
+                  2512&nbsp;&nbsp;1100&nbsp;&nbsp;{employeeId || '1300'}&nbsp;&nbsp;4901
+                </div>
+
+                {/* Ligne 4 : Nom du Titulaire, Fonction & Date d'Expiration */}
+                <div className="relative z-10 border-t border-slate-400/30 pt-2 flex items-end justify-between">
+                  <div>
+                    <span className="text-[8px] uppercase tracking-wider block font-semibold opacity-75">
+                      Titulaire du Compte
+                    </span>
+                    <span className="text-xs font-black uppercase tracking-wide block truncate max-w-[210px]">
+                      {fullName.trim() ? fullName.toUpperCase() : 'NOM & PRÉNOM DU SOCIÉTAIRE'}
+                    </span>
+                    <span className="text-[10px] block opacity-80 font-medium truncate max-w-[210px]">
+                      {position.trim() ? position : 'Fonction non renseignée'}
+                    </span>
+                  </div>
+
+                  <div className="text-right">
+                    <span className="text-[8px] uppercase tracking-wider block font-semibold opacity-75">
+                      Expire Fin
+                    </span>
+                    <span className="text-xs font-mono font-bold">12/29</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            );
+          })()}
 
-            {/* Card Financial Details */}
-            <div className="grid grid-cols-2 gap-3 text-xs bg-slate-950/60 p-3.5 rounded-xl border border-slate-800/80 font-mono">
-              <div>
-                <span className="text-[11px] text-slate-400 block font-sans">Parts Souscrites</span>
-                <span className="font-semibold text-white text-sm">
-                  {sharesCount} parts ({(sharesCount * 5000).toLocaleString('fr-FR')} F)
-                </span>
-              </div>
-              <div>
-                <span className="text-[11px] text-slate-400 block font-sans">Épargne Mensuelle</span>
-                <span className="font-semibold text-emerald-400 text-sm">
-                  {monthlySavings.toLocaleString('fr-FR')} F/mois
-                </span>
-              </div>
+          {/* Synthèse Financière attachée au bas de la carte */}
+          <div className="grid grid-cols-3 gap-2 text-xs bg-white border border-slate-200 p-3 rounded-xl shadow-sm">
+            <div>
+              <span className="text-[10px] text-slate-500 font-semibold block">Parts Souscrites</span>
+              <span className="font-bold text-slate-900">{sharesCount} parts ({(sharesCount * 5000).toLocaleString('fr-FR')} F)</span>
             </div>
-
-            {/* Mode badge */}
-            <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
-              <span>Mode de Retenue :</span>
-              <span className="font-semibold text-slate-200">
-                {isPayrollDeduction ? 'Prélèvement à la source DRH' : 'Versement Guichet Libre'}
+            <div>
+              <span className="text-[10px] text-slate-500 font-semibold block">Épargne Mensuelle</span>
+              <span className="font-bold text-emerald-600">{monthlySavings.toLocaleString('fr-FR')} F/mois</span>
+            </div>
+            <div className="text-right">
+              <span className="text-[10px] text-slate-500 font-semibold block">Règlement</span>
+              <span className="font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 inline-block">
+                {isPayrollDeduction ? 'Prélèvement' : 'Guichet'}
               </span>
             </div>
           </div>

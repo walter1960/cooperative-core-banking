@@ -69,7 +69,7 @@ export const MemberProfile: React.FC<MemberProfileProps> = ({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Rechercher par Code adhérent (ex: A0200225), N° manuel, Nom ou Téléphone..."
+                placeholder="Rechercher par Matricule (ex: 130049), Nom ou Téléphone..."
                 className="w-full bg-slate-50 border border-slate-300 focus:bg-white focus:border-amber-500 rounded-lg pl-9 pr-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none transition-colors"
               />
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
@@ -122,8 +122,7 @@ export const MemberProfile: React.FC<MemberProfileProps> = ({
               </div>
 
               <div className="flex flex-wrap items-center gap-x-5 gap-y-1 mt-1.5 text-xs text-slate-600 font-medium">
-                <div>Code : <span className="font-mono text-amber-800 font-bold">{member.code}</span></div>
-                <div>N° Manuel : <span className="font-mono text-slate-800 font-semibold">{member.manualNumber}</span></div>
+                <div>Matricule : <span className="font-mono text-amber-800 font-bold">{member.manualNumber || member.code}</span></div>
                 <div className="flex items-center gap-1"><Phone className="w-3.5 h-3.5 text-slate-400" /> {member.phone}</div>
                 <div className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5 text-slate-400" /> {member.city} ({member.address})</div>
                 <div className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-slate-400" /> Inscription : {member.registrationDate}</div>

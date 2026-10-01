@@ -112,7 +112,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         id: 'usr-001',
         username: username,
         fullName: username.startsWith('col') ? 'K. MINTA' : 'AMEGNINOU ABLAVI',
-        memberCode: username.startsWith('col') ? null : 'A0200389',
+        memberCode: username.startsWith('col') ? null : '130049',
         collectorId: username.startsWith('col') ? 'COL-04' : null,
         agencyCode: 'A02',
         role: username.startsWith('col') ? UserRole.collector : UserRole.member,

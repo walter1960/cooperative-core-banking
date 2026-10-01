@@ -24,10 +24,12 @@ import {
   Settings,
   ShieldCheck,
   Scale,
-  Sparkles
+  Sparkles,
+  Stamp,
+  Smartphone
 } from 'lucide-react';
 
-export type ModuleType = 'home' | 'inscription' | 'projet' | 'epargne' | 'comptabilite' | 'caisse' | 'credit' | 'societaires' | 'prelevements';
+export type ModuleType = 'home' | 'inscription' | 'projet' | 'epargne' | 'comptabilite' | 'caisse' | 'credit' | 'societaires' | 'prelevements' | 'formulaires' | 'demandes_mobiles';
 
 import { CooperativeHomeScreen } from './components/home/CooperativeHomeScreen';
 import { InscriptionManager } from './components/inscription/InscriptionManager';
@@ -39,6 +41,8 @@ import { CreditManager } from './components/CreditManager';
 import { MemberAccountStatus } from './components/member/MemberAccountStatus';
 import { PayrollDeductionManager } from './components/payroll/PayrollDeductionManager';
 import { CooperativeSettingsModal } from './components/settings/CooperativeSettingsModal';
+import { CoopOfficialForms } from './components/forms/CoopOfficialForms';
+import { MobileRequestsManager } from './components/mobile_requests/MobileRequestsManager';
 
 import { SearchModal } from './components/SearchModal';
 import { AccountOpeningModal } from './components/teller/AccountOpeningModal';
@@ -47,9 +51,8 @@ import { ShiftBalancingModal } from './components/shift/ShiftBalancingModal';
 import { BiometricAuthModal } from './components/biometrics/BiometricAuthModal';
 
 import { StorageService } from './services/storage';
+import { CoreBankingApi } from './services/api';
 import { NetworkMonitor } from './services/sync/NetworkMonitor';
-import { db } from './db/database';
-import { seedDatabase } from './db/seed';
 import { Member, Account, LoanFile, CashRegister } from './types';
 import { useLiveActiveShift } from './db/hooks';
 import { useTheme } from './context/ThemeContext';
@@ -61,8 +64,39 @@ export function App() {
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isAccountOpeningOpen, setIsAccountOpeningOpen] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
-  const [selectedMemberCode, setSelectedMemberCode] = useState<string>('A0200225');
+  const [selectedMemberCode, setSelectedMemberCode] = useState<string>('130049');
   const [preselectedAccount, setPreselectedAccount] = useState<string>('');
+
+  const [isMultiCenter, setIsMultiCenter] = useState<boolean>(() => {
+    return localStorage.getItem('coop_multicenter_enabled') === 'true';
+  });
+  const [institutionCity, setInstitutionCity] = useState<string>(() => {
+    return localStorage.getItem('coop_institution_city') || 'Lomé';
+  });
+  const [pendingMobileCount, setPendingMobileCount] = useState<number>(() => {
+    try {
+      const stored = localStorage.getItem('coop_mobile_requests');
+      if (stored) {
+        return JSON.parse(stored).filter((r: any) => r.status === 'EN_ATTENTE').length;
+      }
+    } catch (_) {}
+    return 2;
+  });
+
+  useEffect(() => {
+    const handleSettingsUpdate = () => {
+      setIsMultiCenter(localStorage.getItem('coop_multicenter_enabled') === 'true');
+      setInstitutionCity(localStorage.getItem('coop_institution_city') || 'Lomé');
+      try {
+        const stored = localStorage.getItem('coop_mobile_requests');
+        if (stored) {
+          setPendingMobileCount(JSON.parse(stored).filter((r: any) => r.status === 'EN_ATTENTE').length);
+        }
+      } catch (_) {}
+    };
+    window.addEventListener('coop_settings_updated', handleSettingsUpdate);
+    return () => window.removeEventListener('coop_settings_updated', handleSettingsUpdate);
+  }, []);
 
   // Data states
   const [members, setMembers] = useState<Member[]>([]);
@@ -72,15 +106,103 @@ export function App() {
 
   const activeShift = useLiveActiveShift();
 
-  const loadData = () => {
-    setMembers(StorageService.getMembers());
-    setAccountsMap(StorageService.getAccounts());
-    setLoansMap(StorageService.getLoans());
-    setCashRegister(StorageService.getCashRegister());
+  const loadData = async () => {
+    // Purger les anciennes données de simulation du cache local si présentes
+    try {
+      const storedMems = localStorage.getItem('banolia_members');
+      if (storedMems && (storedMems.includes('MINDIZINA') || storedMems.includes('130049'))) {
+        localStorage.removeItem('banolia_members');
+        localStorage.removeItem('banolia_accounts');
+        localStorage.removeItem('banolia_loans');
+        localStorage.removeItem('banolia_transactions');
+        localStorage.removeItem('coop_mobile_requests');
+      }
+    } catch (_) {}
+
+    try {
+      const apiMembers = await CoreBankingApi.getMembers();
+      if (apiMembers && apiMembers.length > 0) {
+        const mappedMembers: Member[] = apiMembers.map(m => ({
+          code: m.code,
+          manualNumber: m.manual_number || m.code,
+          fullName: m.full_name,
+          birthDate: m.birth_date || '',
+          registrationDate: m.registration_date,
+          address: m.address,
+          city: m.city,
+          phone: m.phone,
+          spouseName: '',
+          sharesPurchased: m.shares_purchased * m.share_unit_price,
+          sharesSold: 0,
+          sharesAvailable: (m.shares_purchased - m.shares_non_liberated) * m.share_unit_price,
+          shareUnitPrice: m.share_unit_price,
+          status: m.status === 'ACTIVE' ? 'ACTIF' : 'SUSPENDU',
+          fingerprintEnrolled: false
+        }));
+        setMembers(mappedMembers);
+
+        const newAccountsMap: Record<string, Account[]> = {};
+        const newLoansMap: Record<string, LoanFile[]> = {};
+
+        for (const m of apiMembers) {
+          try {
+            const details = await CoreBankingApi.getMemberDetails(m.code);
+            newAccountsMap[m.code] = (details.accounts || []).map(a => ({
+              accountNumber: a.account_number,
+              productName: a.product_code === 'EPG_VOLONTAIRE' ? 'EPARGNE ORDINAIRE (001)' : 'PARTS SOCIALES (101)',
+              type: a.type === 'SHARE_CAPITAL' ? 'SHARES' : 'SAVINGS',
+              realBalance: a.balance,
+              frozenBalance: a.blocked_balance,
+              availableBalance: a.balance - a.blocked_balance,
+              currency: 'F.CFA',
+              status: a.status === 'ACTIVE' ? 'ACTIF' : 'BLOQUE'
+            }));
+
+            newLoansMap[m.code] = (details.loans || []).map(l => ({
+              loanNumber: l.loan_number,
+              productName: l.product_name,
+              amountGranted: l.amount,
+              interestRate: l.interest_rate,
+              durationMonths: l.duration_months,
+              disbursementDate: l.created_at.slice(0, 10),
+              maturityDate: '',
+              monthlyPayment: l.monthly_payment,
+              remainingPrincipal: l.amount,
+              overdueAmount: 0,
+              status: (l.status === 'DECAISSE' || l.status === 'APPROUVE' ? 'EN_COURS' : 'EN_ATTENTE') as 'EN_COURS' | 'EN_RETARD' | 'CLOTURE' | 'EN_ATTENTE'
+            }));
+          } catch (_) {}
+        }
+
+        setAccountsMap(newAccountsMap);
+        setLoansMap(newLoansMap);
+      } else {
+        setMembers([]);
+        setAccountsMap({});
+        setLoansMap({});
+      }
+
+      const mobileReqs = await CoreBankingApi.getMobileRequests();
+      const pendingCount = mobileReqs.filter(r => r.status === 'EN_ATTENTE').length;
+      setPendingMobileCount(pendingCount);
+
+      const stats = await CoreBankingApi.getDashboardStats();
+      if (stats) {
+        setCashRegister(prev => ({
+          ...prev,
+          balance: stats.financials.cashInVault || 0
+        }));
+      }
+    } catch (err) {
+      console.warn('[Core Banking API] Mode local / fallback:', err);
+      setMembers(StorageService.getMembers());
+      setAccountsMap(StorageService.getAccounts());
+      setLoansMap(StorageService.getLoans());
+      setCashRegister(StorageService.getCashRegister());
+    }
   };
 
   useEffect(() => {
-    seedDatabase(db).catch(console.error);
     loadData();
 
     const unsubscribe = NetworkMonitor.getInstance().subscribe((online) => {
@@ -117,7 +239,9 @@ export function App() {
       case 'caisse': return { title: 'Guichet Express & Caisse Journalière', icon: Receipt };
       case 'credit': return { title: 'Portefeuille Crédit & Prêts sur Salaire', icon: Landmark };
       case 'societaires': return { title: 'Situation des Comptes Adhérent 360°', icon: Users };
-      case 'prelevements': return { title: 'Prélèvements à la Source & Retenues sur Salaires', icon: Building2 };
+      case 'prelevements': return { title: 'Prélèvements', icon: Building2 };
+      case 'formulaires': return { title: 'Formulaires Officiels (Prêt & Retrait)', icon: Stamp };
+      case 'demandes_mobiles': return { title: 'Demandes Mobiles (Prêts & Retraits en Ligne)', icon: Smartphone };
       default: return { title: 'Accueil Coopérative', icon: Landmark };
     }
   };
@@ -237,6 +361,45 @@ export function App() {
           >
             Projets
           </button>
+
+          <button
+            onClick={() => setActiveModule('formulaires')}
+            style={getTabStyle('formulaires')}
+            className={`px-2.5 py-1 rounded font-semibold transition-all ${
+              activeModule !== 'formulaires' ? 'hover:bg-white/10 opacity-90 hover:opacity-100' : ''
+            }`}
+          >
+            Formulaires
+          </button>
+
+          <button
+            onClick={() => setActiveModule('demandes_mobiles')}
+            style={getTabStyle('demandes_mobiles')}
+            className={`px-2.5 py-1 rounded font-semibold transition-all flex items-center gap-1.5 ${
+              activeModule !== 'demandes_mobiles' ? 'hover:bg-white/10 opacity-90 hover:opacity-100' : ''
+            }`}
+          >
+            <Smartphone className="w-3.5 h-3.5" />
+            <span>Demandes Mobiles</span>
+            {pendingMobileCount > 0 && (
+              <span className="bg-rose-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full animate-pulse shadow-sm">
+                {pendingMobileCount}
+              </span>
+            )}
+          </button>
+        </div>
+
+        {/* Multi-centre vs Mono-centre Badge Dynamique */}
+        <div className="flex items-center gap-2">
+          {isMultiCenter ? (
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-100 border border-indigo-400/30">
+              <Building2 className="w-3 h-3" /> Multi-centre
+            </span>
+          ) : (
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-100 border border-emerald-400/30">
+              <Building2 className="w-3 h-3" /> Siège Unique ({institutionCity})
+            </span>
+          )}
         </div>
       </header>
 
@@ -359,6 +522,16 @@ export function App() {
 
             {activeModule === 'comptabilite' && (
               <AccountingView />
+            )}
+
+            {activeModule === 'formulaires' && (
+              <CoopOfficialForms
+                members={members}
+              />
+            )}
+
+            {activeModule === 'demandes_mobiles' && (
+              <MobileRequestsManager />
             )}
           </main>
         </div>

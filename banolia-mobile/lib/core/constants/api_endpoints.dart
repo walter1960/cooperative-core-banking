@@ -24,10 +24,6 @@ class ApiEndpoints {
   static const String loanApply = '/loans/apply';
   static const String loanApplications = '/loans/applications';
 
-  // Mobile Money
-  static const String momoC2bCollect = '/momo/c2b-collect';
-  static const String momoB2cDisburse = '/momo/b2c-disburse';
-  static const String momoStatus = '/momo/status/{txRef}';
 
   // Field Collector & Sync
   static const String syncBatch = '/sync/batch';

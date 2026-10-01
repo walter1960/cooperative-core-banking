@@ -224,7 +224,7 @@ export const VoiceAssistantModal: React.FC<VoiceAssistantModalProps> = ({
               {[
                 "Versement de 50000 francs pour Tomrom",
                 "Retrait de 20000 pour MILDZINA",
-                "Situation du compte de l'adhérent 610",
+                "Situation du compte du matricule 130049",
                 "Nye di be maɖo akpe blaeve ɖe Tomrom ƒe akɔnta me",
                 "Sɔ akpe blaetɔ̃ do Ablavi ƒe akɔnti me",
                 "Pose deux sacs pour Tomrom"

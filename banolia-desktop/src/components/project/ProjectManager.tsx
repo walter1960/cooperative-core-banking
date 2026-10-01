@@ -29,53 +29,7 @@ interface ProjectRequest {
   status: 'APPROUVE' | 'EN_ATTENTE_COMITE' | 'DECAISSE' | 'REJETE';
 }
 
-const initialProjects: ProjectRequest[] = [
-  {
-    id: 'PRJ-2026-001',
-    projectCode: 'PRJ-001',
-    memberCode: 'A0200225',
-    memberName: 'KODJO Koffi Jean-Baptiste',
-    employeeId: 'MAT-4081',
-    department: 'Exploitation & Opérations',
-    projectType: 'HABITAT',
-    title: 'Acquisition de terrain & Construction habitat',
-    requestedAmount: 7500000,
-    contributionAmount: 2500000,
-    durationMonths: 48,
-    submissionDate: '12/08/2026',
-    status: 'EN_ATTENTE_COMITE'
-  },
-  {
-    id: 'PRJ-2026-002',
-    projectCode: 'PRJ-002',
-    memberCode: 'A0200226',
-    memberName: 'AMEGAVIE Akossiwa Marie',
-    employeeId: 'MAT-3129',
-    department: 'Administration & Comptabilité',
-    projectType: 'VEHICULE',
-    title: 'Achat véhicule utilitaire personnel',
-    requestedAmount: 4000000,
-    contributionAmount: 1000000,
-    durationMonths: 36,
-    submissionDate: '05/08/2026',
-    status: 'APPROUVE'
-  },
-  {
-    id: 'PRJ-2026-003',
-    projectCode: 'PRJ-003',
-    memberCode: 'A0200227',
-    memberName: 'BATAKA Essohanam Paul',
-    employeeId: 'MAT-5204',
-    department: 'Maintenance & Logistique',
-    projectType: 'EQUIPEMENT',
-    title: 'Installation équipement énergie solaire photovoltaïque',
-    requestedAmount: 2500000,
-    contributionAmount: 500000,
-    durationMonths: 24,
-    submissionDate: '18/08/2026',
-    status: 'DECAISSE'
-  }
-];
+const initialProjects: ProjectRequest[] = [];
 
 export const ProjectManager: React.FC = () => {
   const { theme } = useTheme();
@@ -87,9 +41,9 @@ export const ProjectManager: React.FC = () => {
   // Form state for new project submission
   const [newProject, setNewProject] = useState({
     memberName: 'TCHALLA Komlan Didier',
-    employeeId: 'MAT-2980',
-    memberCode: 'A0200228',
-    department: 'Service Général & Exploitation',
+    employeeId: '130049',
+    memberCode: '130049',
+    department: 'Direction des Services Opérationnels',
     projectType: 'HABITAT' as ProjectRequest['projectType'],
     title: '',
     requestedAmount: 3000000,
@@ -121,9 +75,9 @@ export const ProjectManager: React.FC = () => {
     setIsNewProjectModalOpen(false);
     setNewProject({
       memberName: 'TCHALLA Komlan Didier',
-      employeeId: 'MAT-2980',
-      memberCode: 'A0200228',
-      department: 'Service Général & Exploitation',
+      employeeId: '130049',
+      memberCode: '130049',
+      department: 'Direction des Services Opérationnels',
       projectType: 'HABITAT',
       title: '',
       requestedAmount: 3000000,
@@ -248,78 +202,97 @@ export const ProjectManager: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredProjects.map((p) => (
-            <div key={p.id} className="bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col justify-between space-y-3 shadow-sm hover:border-slate-400 transition-colors">
-              <div>
-                <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                  <span className="font-mono font-bold text-slate-900 text-xs">{p.projectCode}</span>
-                  <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold border ${
-                    p.status === 'DECAISSE'
-                      ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                      : p.status === 'APPROUVE'
-                      ? 'bg-blue-50 text-blue-800 border-blue-200'
-                      : 'bg-slate-100 text-slate-800 border-slate-300'
-                  }`}>
-                    {p.status === 'DECAISSE' ? 'DÉCAISSÉ' : p.status === 'APPROUVE' ? 'APPROUVÉ' : 'EN ATTENTE'}
-                  </span>
-                </div>
-
-                <h3 className="font-bold text-sm text-slate-900 mt-2.5 leading-snug">{p.title}</h3>
-                <div className="text-xs text-slate-600 mt-1 font-medium">
-                  <strong>{p.memberName}</strong> ({p.employeeId})
-                </div>
-                <div className="text-[11px] text-slate-500">{p.department}</div>
-
-                <div className="mt-3 bg-white p-3 rounded-lg border border-slate-200 space-y-1 text-xs">
-                  <div className="flex justify-between">
-                    <span className="text-slate-500">Montant Demandé :</span>
-                    <span className="font-mono font-bold text-slate-900">{p.requestedAmount.toLocaleString('fr-FR')} F</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-500">Apport Personnel :</span>
-                    <span className="font-mono font-medium text-emerald-800">+{p.contributionAmount.toLocaleString('fr-FR')} F</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-500">Durée de Remboursement :</span>
-                    <span className="font-mono font-bold text-slate-800">{p.durationMonths} mois</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
-                {p.status === 'EN_ATTENTE_COMITE' && (
-                  <button
-                    onClick={() => handleApproveProject(p.id)}
-                    className="flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm"
-                  >
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>Approuver Comité</span>
-                  </button>
-                )}
-
-                {p.status === 'APPROUVE' && (
-                  <button
-                    onClick={() => handleDisburseProject(p.id)}
-                    style={{ backgroundColor: theme.primaryAccent, color: '#ffffff' }}
-                    className="flex items-center gap-1.5 hover:opacity-90 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm"
-                  >
-                    <Coins className="w-3.5 h-3.5" />
-                    <span>Décaisser les Fonds</span>
-                  </button>
-                )}
-
-                {p.status === 'DECAISSE' && (
-                  <span className="text-xs text-emerald-800 font-bold flex items-center gap-1.5">
-                    <Coins className="w-3.5 h-3.5 text-emerald-700" />
-                    Fonds Positionnés sur Compte
-                  </span>
-                )}
-              </div>
+        {filteredProjects.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 px-4 bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl text-center">
+            <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-3 shadow-inner">
+              <Coins className="w-8 h-8 text-slate-400" />
             </div>
-          ))}
-        </div>
+            <h3 className="text-base font-bold text-slate-800">Pas de projet en cours</h3>
+            <p className="text-xs text-slate-500 max-w-sm mt-1">
+              Aucun projet sociétaire n'est actuellement en cours de financement ou en attente d'instruction.
+            </p>
+            <button
+              onClick={() => setIsNewProjectModalOpen(true)}
+              className="mt-5 flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-sm transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Déposer un Nouveau Projet</span>
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredProjects.map((p) => (
+              <div key={p.id} className="bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col justify-between space-y-3 shadow-sm hover:border-slate-400 transition-colors">
+                <div>
+                  <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                    <span className="font-mono font-bold text-slate-900 text-xs">{p.projectCode}</span>
+                    <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold border ${
+                      p.status === 'DECAISSE'
+                        ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                        : p.status === 'APPROUVE'
+                        ? 'bg-blue-50 text-blue-800 border-blue-200'
+                        : 'bg-slate-100 text-slate-800 border-slate-300'
+                    }`}>
+                      {p.status === 'DECAISSE' ? 'DÉCAISSÉ' : p.status === 'APPROUVE' ? 'APPROUVÉ' : 'EN ATTENTE'}
+                    </span>
+                  </div>
+
+                  <h3 className="font-bold text-sm text-slate-900 mt-2.5 leading-snug">{p.title}</h3>
+                  <div className="text-xs text-slate-600 mt-1 font-medium">
+                    <strong>{p.memberName}</strong> ({p.employeeId})
+                  </div>
+                  <div className="text-[11px] text-slate-500">{p.department}</div>
+
+                  <div className="mt-3 bg-white p-3 rounded-lg border border-slate-200 space-y-1 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">Montant Demandé :</span>
+                      <span className="font-mono font-bold text-slate-900">{p.requestedAmount.toLocaleString('fr-FR')} F</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">Apport Personnel :</span>
+                      <span className="font-mono font-medium text-emerald-800">+{p.contributionAmount.toLocaleString('fr-FR')} F</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">Durée de Remboursement :</span>
+                      <span className="font-mono font-bold text-slate-800">{p.durationMonths} mois</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
+                  {p.status === 'EN_ATTENTE_COMITE' && (
+                    <button
+                      onClick={() => handleApproveProject(p.id)}
+                      className="flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm"
+                    >
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                      <span>Approuver Comité</span>
+                    </button>
+                  )}
+
+                  {p.status === 'APPROUVE' && (
+                    <button
+                      onClick={() => handleDisburseProject(p.id)}
+                      style={{ backgroundColor: theme.primaryAccent, color: '#ffffff' }}
+                      className="flex items-center gap-1.5 hover:opacity-90 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm"
+                    >
+                      <Coins className="w-3.5 h-3.5" />
+                      <span>Décaisser les Fonds</span>
+                    </button>
+                  )}
+
+                  {p.status === 'DECAISSE' && (
+                    <span className="text-xs text-emerald-800 font-bold flex items-center gap-1.5">
+                      <Coins className="w-3.5 h-3.5 text-emerald-700" />
+                      Fonds Positionnés sur Compte
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Modal: New Project Submission */}

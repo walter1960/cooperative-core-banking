@@ -25,14 +25,16 @@ import {
   RealisticCaisseIcon,
   RealisticCreditIcon,
   RealisticSocietairesIcon,
-  RealisticPrelevementsIcon
+  RealisticPrelevementsIcon,
+  RealisticFormulairesIcon,
+  RealisticMobileRequestsIcon
 } from './RealisticCoopIcons';
 
 interface ModuleItem {
   id: string;
   title: string;
   subtitle: string;
-  iconType: 'inscription' | 'projet' | 'epargne' | 'comptabilite' | 'caisse' | 'credit' | 'societaires' | 'prelevements';
+  iconType: 'inscription' | 'projet' | 'epargne' | 'comptabilite' | 'caisse' | 'credit' | 'societaires' | 'prelevements' | 'formulaires' | 'mobile_requests';
 }
 
 interface CooperativeHomeScreenProps {
@@ -42,14 +44,43 @@ interface CooperativeHomeScreenProps {
 export const CooperativeHomeScreen: React.FC<CooperativeHomeScreenProps> = ({ onSelectModule }) => {
   // Institution branding state (customizable and persisted)
   const [institutionName, setInstitutionName] = useState<string>(() => {
-    return localStorage.getItem('coop_institution_name') || 'COOPEC';
+    return localStorage.getItem('coop_institution_name') || 'COOPECTAT';
   });
   const [institutionSubtitle, setInstitutionSubtitle] = useState<string>(() => {
-    return localStorage.getItem('coop_institution_sub') || "Coopérative d'Épargne et de Crédit";
+    return localStorage.getItem('coop_institution_sub') || "Coopérative d'Épargne et de Crédits des Travailleurs";
+  });
+  const [institutionCity, setInstitutionCity] = useState<string>(() => {
+    return localStorage.getItem('coop_institution_city') || 'Lomé';
+  });
+  const [partnerEntity, setPartnerEntity] = useState<string>(() => {
+    return localStorage.getItem('coop_partner_entity') || 'ASECNA TOGO';
+  });
+  const [accountManagerName, setAccountManagerName] = useState<string>(() => {
+    return localStorage.getItem('coop_account_manager_name') || 'M. KODJO Mensah';
+  });
+  const [accountManagerTitle, setAccountManagerTitle] = useState<string>(() => {
+    return localStorage.getItem('coop_account_manager_title') || 'Gestionnaire de Portefeuille / Gérant';
   });
   const [logoUrl, setLogoUrl] = useState<string>(() => {
     return localStorage.getItem('coop_institution_logo') || '/copectat_logo.png';
   });
+  const [isMultiCenter, setIsMultiCenter] = useState<boolean>(() => {
+    return localStorage.getItem('coop_multicenter_enabled') === 'true';
+  });
+
+  useEffect(() => {
+    const handleSettingsUpdate = () => {
+      setIsMultiCenter(localStorage.getItem('coop_multicenter_enabled') === 'true');
+      setInstitutionName(localStorage.getItem('coop_institution_name') || 'COOPECTAT');
+      setInstitutionSubtitle(localStorage.getItem('coop_institution_sub') || "Coopérative d'Épargne et de Crédits des Travailleurs");
+      setInstitutionCity(localStorage.getItem('coop_institution_city') || 'Lomé');
+      setPartnerEntity(localStorage.getItem('coop_partner_entity') || 'ASECNA TOGO');
+      setAccountManagerName(localStorage.getItem('coop_account_manager_name') || 'M. KODJO Mensah');
+      setAccountManagerTitle(localStorage.getItem('coop_account_manager_title') || 'Gestionnaire de Portefeuille / Gérant');
+    };
+    window.addEventListener('coop_settings_updated', handleSettingsUpdate);
+    return () => window.removeEventListener('coop_settings_updated', handleSettingsUpdate);
+  }, []);
 
   // Custom Theme from Global Context
   const { theme, setTheme } = useTheme();
@@ -63,14 +94,15 @@ export const CooperativeHomeScreen: React.FC<CooperativeHomeScreenProps> = ({ on
     setTheme(newTheme);
   };
 
-  // Session Info
-  const [sessionInfo] = useState({
-    user: 'ADMINISTRATEUR',
-    agency: 'Agence Siège',
+  // Session Info Dynamique (Zéro texte en dur)
+  const sessionInfo = {
+    user: accountManagerName.toUpperCase(),
+    title: accountManagerTitle,
+    agency: isMultiCenter ? 'Agence Siège (Réseau Multi-centre)' : `Siège Unique (${institutionCity})`,
     date: new Date().toLocaleDateString('fr-FR'),
     cashier: 'CSH-001',
     balance: '0 F.CFA'
-  });
+  };
 
   const modules: ModuleItem[] = [
     {
@@ -117,9 +149,21 @@ export const CooperativeHomeScreen: React.FC<CooperativeHomeScreenProps> = ({ on
     },
     {
       id: 'prelevements',
-      title: 'Prelevements',
-      subtitle: 'Retenues à la source employeurs & bordereaux de paie',
+      title: 'Prélèvements',
+      subtitle: 'Bordereaux et gestion des prélèvements',
       iconType: 'prelevements'
+    },
+    {
+      id: 'formulaires',
+      title: 'Formulaires',
+      subtitle: 'Délibération de prêt, fiche de retrait certifiée & formulaires officiels',
+      iconType: 'formulaires'
+    },
+    {
+      id: 'demandes_mobiles',
+      title: 'Demandes Mobiles',
+      subtitle: 'Prêts et retraits soumis en direct par les sociétaires depuis leur smartphone',
+      iconType: 'mobile_requests'
     }
   ];
 
@@ -169,6 +213,10 @@ export const CooperativeHomeScreen: React.FC<CooperativeHomeScreenProps> = ({ on
         return <RealisticSocietairesIcon className="w-24 h-24" />;
       case 'prelevements':
         return <RealisticPrelevementsIcon className="w-24 h-24" />;
+      case 'formulaires':
+        return <RealisticFormulairesIcon className="w-24 h-24" />;
+      case 'mobile_requests':
+        return <RealisticMobileRequestsIcon className="w-24 h-24" />;
     }
   };
 
@@ -319,15 +367,22 @@ export const CooperativeHomeScreen: React.FC<CooperativeHomeScreenProps> = ({ on
             )}
 
             {/* Session Metadata */}
-            <div className="space-y-2.5 text-xs text-white/90">
+            <div className="space-y-2 text-xs text-white/90">
               <div className="flex items-center justify-between">
                 <span className="opacity-70">Utilisateur :</span>
-                <span className="font-bold font-mono">{sessionInfo.user}</span>
+                <span className="font-bold font-mono truncate max-w-[145px] text-right" title={sessionInfo.user}>{sessionInfo.user}</span>
               </div>
+
+              {sessionInfo.title && (
+                <div className="flex items-center justify-between text-[11px] text-emerald-300">
+                  <span className="opacity-70 text-white/70">Rôle :</span>
+                  <span className="font-medium truncate max-w-[145px] text-right">{sessionInfo.title}</span>
+                </div>
+              )}
 
               <div className="flex items-center justify-between">
                 <span className="opacity-70">Agence :</span>
-                <span className="font-semibold truncate max-w-[150px]">{sessionInfo.agency}</span>
+                <span className="font-semibold truncate max-w-[145px] text-right">{sessionInfo.agency}</span>
               </div>
 
               <div className="flex items-center justify-between">
@@ -347,16 +402,11 @@ export const CooperativeHomeScreen: React.FC<CooperativeHomeScreenProps> = ({ on
             </div>
           </div>
 
-          {/* Footer branding & compliance */}
-          <div className="text-[11px] opacity-75 border-t border-white/10 pt-3 space-y-0.5">
-            <div>Plateforme : <strong>Core Banking Coopératif</strong></div>
-            <div>Réglementation : <strong>BCEAO / SYSCOA-SFD</strong></div>
-          </div>
         </div>
 
         {/* Right Main Working Canvas */}
         <div 
-          className="flex-1 relative p-8 flex items-center justify-center overflow-auto transition-colors"
+          className="flex-1 relative p-6 flex items-center justify-center overflow-auto transition-colors"
           style={{ backgroundColor: theme.canvasBg }}
         >
           {/* Subtle Angled Background Graphic with Customizable Theme Ribbons */}
@@ -367,8 +417,8 @@ export const CooperativeHomeScreen: React.FC<CooperativeHomeScreenProps> = ({ on
             </svg>
           </div>
 
-          {/* Grid of Large Functional Action Tiles - Full Canvas Coverage */}
-          <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-7xl px-6">
+          {/* Grid of Large Functional Action Tiles - Full Canvas Coverage (Responsive for 10 modules) */}
+          <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full max-w-7xl px-3 py-2">
             {modules.map((m) => (
               <button
                 key={m.id}

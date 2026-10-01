@@ -532,7 +532,7 @@ export const ReportsManager: React.FC = () => {
             {/* REPORT 7: RH ET PAIE */}
             {activeCategory === 'rh_paie' && (
               <div className="space-y-5 text-sm">
-                <div className="font-bold text-slate-800 text-base">Bordereau Récapitulatif de Retenues à la Source (Convention Employeur Partenaire)</div>
+                <div className="font-bold text-slate-800 text-base">Bordereau Récapitulatif des Prélèvements</div>
                 <div className="overflow-x-auto rounded-xl border border-slate-200">
                   <table className="w-full text-left border-collapse text-sm">
                     <thead className="bg-slate-50 uppercase text-xs font-bold text-slate-600 border-b border-slate-200">
@@ -542,12 +542,12 @@ export const ReportsManager: React.FC = () => {
                         <th className="py-3.5 px-4 text-right">Parts</th>
                         <th className="py-3.5 px-4 text-right">Épargne</th>
                         <th className="py-3.5 px-4 text-right">Mensualité Prêt</th>
-                        <th className="py-3.5 px-4 text-right">Total Retenu</th>
+                        <th className="py-3.5 px-4 text-right">Total Prélèvement</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 font-mono text-slate-800">
                       <tr>
-                        <td className="py-3 px-4 font-bold text-slate-900">MAT-9021</td>
+                        <td className="py-3 px-4 font-bold text-slate-900">130049</td>
                         <td className="py-3 px-4 font-sans font-bold text-slate-900">KODJO Koffi Jean-Baptiste</td>
                         <td className="py-3 px-4 text-right">10 000 F</td>
                         <td className="py-3 px-4 text-right text-emerald-800 font-bold">+ 25 000 F</td>
@@ -555,7 +555,7 @@ export const ReportsManager: React.FC = () => {
                         <td className="py-3 px-4 text-right font-bold text-slate-900">130 500 F</td>
                       </tr>
                       <tr>
-                        <td className="py-3 px-4 font-bold text-slate-900">MAT-9044</td>
+                        <td className="py-3 px-4 font-bold text-slate-900">130050</td>
                         <td className="py-3 px-4 font-sans font-bold text-slate-900">AMEGAVIE Akossiwa Marie</td>
                         <td className="py-3 px-4 text-right">5 000 F</td>
                         <td className="py-3 px-4 text-right text-emerald-800 font-bold">+ 20 000 F</td>

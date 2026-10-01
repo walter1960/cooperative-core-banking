@@ -61,7 +61,7 @@ export const PayrollDeductionManager: React.FC = () => {
 
       return {
         id: `PR-${String(idx + 1).padStart(3, '0')}`,
-        employeeId: m.employeeId || `MAT-${String(8800 + idx)}`,
+        employeeId: m.employeeId || m.manualNumber || String(130049 + idx),
         memberCode: m.code,
         fullName: m.fullName,
         netSalary: estimatedNetSalary,
@@ -107,7 +107,7 @@ export const PayrollDeductionManager: React.FC = () => {
             <div>
               <div className="flex items-center gap-3">
                 <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-                  Prélèvements à la Source & Retenues sur Salaires
+                  Prélèvements
                 </h1>
                 <span className="bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-1 rounded-full border border-slate-200 uppercase tracking-wider">
                   Check-off Automatique

@@ -23,8 +23,8 @@ export const seedDatabase = async (database: BanoliaDatabase): Promise<void> => 
   const members: DbMember[] = [
     {
       id: 'mem-001',
-      code: 'A0200225',
-      manualNumber: '610',
+      code: '130049',
+      manualNumber: '130049',
       fullName: 'MINDIZINA Tomrom',
       birthDate: '1978-08-18',
       registrationDate: '2009-07-29',
@@ -44,8 +44,8 @@ export const seedDatabase = async (database: BanoliaDatabase): Promise<void> => 
     },
     {
       id: 'mem-002',
-      code: 'A0200226',
-      manualNumber: '611',
+      code: '130050',
+      manualNumber: '130050',
       fullName: 'AGBODJAN Koffi Mensah',
       birthDate: '1985-04-12',
       registrationDate: '2012-01-15',
@@ -65,8 +65,8 @@ export const seedDatabase = async (database: BanoliaDatabase): Promise<void> => 
     },
     {
       id: 'mem-003',
-      code: 'A0200227',
-      manualNumber: '612',
+      code: '130051',
+      manualNumber: '130051',
       fullName: 'AMOUZOU Ablavi',
       birthDate: '1990-11-03',
       registrationDate: '2018-06-04',
@@ -86,8 +86,8 @@ export const seedDatabase = async (database: BanoliaDatabase): Promise<void> => 
     },
     {
       id: 'mem-004',
-      code: 'A0200228',
-      manualNumber: '613',
+      code: '130052',
+      manualNumber: '130052',
       fullName: 'KOUASSI Yao Jean',
       birthDate: '1982-05-20',
       registrationDate: '2019-09-10',
@@ -111,8 +111,8 @@ export const seedDatabase = async (database: BanoliaDatabase): Promise<void> => 
   const accounts: DbAccount[] = [
     {
       id: 'acc-001',
-      accountNumber: '25121100A020022501',
-      memberCode: 'A0200225',
+      accountNumber: '2512110013004901',
+      memberCode: '130049',
       productCode: '251211',
       productName: 'EPARGNE ORDINAIRE (001)',
       type: 'SAVINGS',
@@ -127,8 +127,8 @@ export const seedDatabase = async (database: BanoliaDatabase): Promise<void> => 
     },
     {
       id: 'acc-002',
-      accountNumber: '20412110A020022501',
-      memberCode: 'A0200225',
+      accountNumber: '2041211013004901',
+      memberCode: '130049',
       productCode: '204121',
       productName: 'CREDIT AU PERSONNEL (002)',
       type: 'LOAN',
@@ -143,8 +143,8 @@ export const seedDatabase = async (database: BanoliaDatabase): Promise<void> => 
     },
     {
       id: 'acc-003',
-      accountNumber: '25331010A020022501',
-      memberCode: 'A0200225',
+      accountNumber: '2533101013004901',
+      memberCode: '130049',
       productCode: '253310',
       productName: 'EPARGNE REMBOURSEMENT CREDIT / PLAN (003)',
       type: 'CAREER_PLAN',
@@ -159,8 +159,8 @@ export const seedDatabase = async (database: BanoliaDatabase): Promise<void> => 
     },
     {
       id: 'acc-004',
-      accountNumber: '25121100A020022601',
-      memberCode: 'A0200226',
+      accountNumber: '2512110013005001',
+      memberCode: '130050',
       productCode: '251211',
       productName: 'EPARGNE ORDINAIRE (001)',
       type: 'SAVINGS',
@@ -175,8 +175,8 @@ export const seedDatabase = async (database: BanoliaDatabase): Promise<void> => 
     },
     {
       id: 'acc-005',
-      accountNumber: '25121100A020022701',
-      memberCode: 'A0200227',
+      accountNumber: '2512110013005101',
+      memberCode: '130051',
       productCode: '251211',
       productName: 'EPARGNE ORDINAIRE (001)',
       type: 'SAVINGS',
@@ -191,8 +191,8 @@ export const seedDatabase = async (database: BanoliaDatabase): Promise<void> => 
     },
     {
       id: 'acc-006',
-      accountNumber: '25121100A020022801',
-      memberCode: 'A0200228',
+      accountNumber: '2512110013005201',
+      memberCode: '130052',
       productCode: '251211',
       productName: 'EPARGNE ORDINAIRE (001)',
       type: 'SAVINGS',
@@ -212,7 +212,7 @@ export const seedDatabase = async (database: BanoliaDatabase): Promise<void> => 
     {
       id: 'loan-001',
       loanNumber: 'CR-2025-089',
-      memberCode: 'A0200225',
+      memberCode: '130049',
       productName: 'CREDIT AU PERSONNEL (002)',
       amountGranted: 6000000,
       interestRate: 8.5,

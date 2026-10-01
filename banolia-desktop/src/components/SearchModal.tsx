@@ -52,7 +52,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Tapez un nom, code adhérent, n° manuel ou téléphone..."
+            placeholder="Tapez un nom, matricule (ex: 130049) ou téléphone..."
             className="w-full bg-transparent text-slate-900 placeholder-slate-400 text-sm focus:outline-none font-medium"
           />
           <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-700 rounded-lg">
@@ -82,7 +82,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                       {m.fullName}
                     </span>
                     <span className="font-mono text-xs bg-slate-100 text-slate-700 font-semibold px-2 py-0.5 rounded border border-slate-200">
-                      {m.code} (Manuel: {m.manualNumber})
+                      Matricule: {m.manualNumber || m.code}
                     </span>
                   </div>
                   <div className="flex items-center gap-4 text-xs text-slate-500 mt-1 font-medium">

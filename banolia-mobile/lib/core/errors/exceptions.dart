@@ -57,9 +57,9 @@ class InvalidHashChainException extends AppException {
 
   const InvalidHashChainException({
     required String message,
-    required this.brokenSequenceNumber,
-    required this.expectedHash,
-    required this.actualHash,
+    this.brokenSequenceNumber = -1,
+    this.expectedHash = '',
+    this.actualHash = '',
   }) : super(message, 'HASH_CHAIN_INTEGRITY_VIOLATION');
 }
 

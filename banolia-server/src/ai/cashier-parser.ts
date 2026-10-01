@@ -8,31 +8,31 @@ import { MemberRecord, VoiceParseRequest, VoiceParseResponse } from './types';
 
 export const SEED_MEMBERS: MemberRecord[] = [
   {
-    code: 'A0200225',
-    manualNumber: '610',
+    code: '130049',
+    manualNumber: '130049',
     fullName: 'MILDZINA Tomrom',
     phone: '22262101',
     accounts: [
       {
-        accountNumber: '25121100A020022501',
+        accountNumber: '2512110013004901',
         productName: 'EPARGNE ORDINAIRE (001)',
         type: 'SAVINGS',
         balance: 280424
       },
       {
-        accountNumber: '20412110A020022501',
+        accountNumber: '2041211013004901',
         productName: 'CREDIT AU PERSONNEL (002)',
         type: 'LOAN',
         balance: 5257109
       },
       {
-        accountNumber: '25331010A020022501',
+        accountNumber: '2533101013004901',
         productName: 'EPARGNE REMBOURSEMENT CREDIT / PLAN (003)',
         type: 'CAREER_PLAN',
         balance: 125839
       },
       {
-        accountNumber: '25331020A020022501',
+        accountNumber: '2533102013004901',
         productName: 'PLAN EPARGNE PROJET PLUS (004)',
         type: 'PROJECT_PLAN',
         balance: 0
@@ -40,19 +40,19 @@ export const SEED_MEMBERS: MemberRecord[] = [
     ]
   },
   {
-    code: 'A0200226',
-    manualNumber: '611',
+    code: '130050',
+    manualNumber: '130050',
     fullName: 'AGBODJAN Koffi Mensah',
     phone: '90123456',
     accounts: [
       {
-        accountNumber: '25121100A020022601',
+        accountNumber: '2512110013005001',
         productName: 'EPARGNE ORDINAIRE (001)',
         type: 'SAVINGS',
         balance: 150000
       },
       {
-        accountNumber: '20110000A020022601',
+        accountNumber: '2011000013005001',
         productName: 'CREDIT COURT TERME (001)',
         type: 'LOAN',
         balance: 450000
@@ -60,19 +60,19 @@ export const SEED_MEMBERS: MemberRecord[] = [
     ]
   },
   {
-    code: 'A0200227',
-    manualNumber: '612',
+    code: '130051',
+    manualNumber: '130051',
     fullName: 'AMOUZOU Ablavi',
     phone: '98765432',
     accounts: [
       {
-        accountNumber: '25121100A020022701',
+        accountNumber: '2512110013005101',
         productName: 'EPARGNE ORDINAIRE (001)',
         type: 'SAVINGS',
-        balance: 89000
+        balance: 85000
       },
       {
-        accountNumber: '25800000A020022701',
+        accountNumber: '2580000013005101',
         productName: 'COMPTE TONTINE JOURNALIERE (005)',
         type: 'TONTINE',
         balance: 31000

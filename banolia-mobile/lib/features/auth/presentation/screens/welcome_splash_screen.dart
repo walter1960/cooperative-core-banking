@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../../core/constants/app_colors.dart';
 import 'modern_login_sheet.dart';
 
 class WelcomeSplashScreen extends StatefulWidget {
+  final Future<({bool success, String? errorMessage, String? memberName})> Function(String username, String password) onVerifyLogin;
   final VoidCallback onBiometricLogin;
-  final Function(String username, String password) onStandardLogin;
-  final VoidCallback onDemoMode;
 
   const WelcomeSplashScreen({
     super.key,
+    required this.onVerifyLogin,
     required this.onBiometricLogin,
-    required this.onStandardLogin,
-    required this.onDemoMode,
   });
 
   @override
@@ -57,7 +54,7 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => ModernLoginSheet(
-        onLogin: widget.onStandardLogin,
+        onVerifyLogin: widget.onVerifyLogin,
         onBiometric: widget.onBiometricLogin,
       ),
     );
@@ -168,10 +165,10 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
               const SizedBox(width: 10),
               Expanded(
                 child: _buildWideUtilityTile(
-                  icon: Icons.calculate_rounded,
+                  icon: Icons.support_agent_rounded,
                   color: const Color(0xFF2563EB),
-                  title: 'Simulateur',
-                  subtitle: 'Calcul de crédit',
+                  title: 'Assistance',
+                  subtitle: 'Aide & Contact',
                 ),
               ),
             ],
@@ -200,44 +197,32 @@ class _WelcomeSplashScreenState extends State<WelcomeSplashScreen> with SingleTi
           ),
           const SizedBox(height: 14),
 
-          // Institutional access button
+          // Institutional access info
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: const Color(0xFF0F172A),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Row(
+            child: const Row(
               children: [
-                const Icon(Icons.verified_user_outlined, color: Colors.white, size: 26),
-                const SizedBox(width: 12),
-                const Expanded(
+                Icon(Icons.account_balance_rounded, color: Colors.white, size: 26),
+                SizedBox(width: 12),
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Accès Découverte',
+                        'Adhésion & Inscription en Agence',
                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                       ),
+                      SizedBox(height: 2),
                       Text(
-                        "Consultez les services sans authentification",
+                        "L'ouverture de compte s'effectue exclusivement au guichet COOPECTAT par un gestionnaire.",
                         style: TextStyle(color: Colors.white70, fontSize: 11),
                       ),
                     ],
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(ctx);
-                    widget.onDemoMode();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: const Color(0xFF0F172A),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  ),
-                  child: const Text('Ouvrir', style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
               ],
             ),

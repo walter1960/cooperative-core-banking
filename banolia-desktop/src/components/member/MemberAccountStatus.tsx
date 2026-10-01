@@ -19,6 +19,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { StorageService } from '../../services/storage';
+import { CoreBankingApi } from '../../services/api';
 import { Member, Account, LoanFile } from '../../types';
 import { VirtualMemberCard } from '../card/VirtualMemberCard';
 import { useTheme } from '../../context/ThemeContext';
@@ -31,26 +32,76 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
   const { theme } = useTheme();
   const [members, setMembers] = useState<Member[]>([]);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>('A0200225');
-  const [activeTab, setActiveTab] = useState<'comptes' | 'cheques' | 'credits' | 'dat' | 'plan_epargne'>('comptes');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<'comptes' | 'prelevements' | 'credits' | 'dat' | 'plan_epargne'>('comptes');
+
+  const [memberAccounts, setMemberAccounts] = useState<any[]>([]);
+  const [memberLoans, setMemberLoans] = useState<any[]>([]);
+  const [savingsLock, setSavingsLock] = useState<any>(null);
 
   // Parameters matching the classical core banking screen
   const [exercise, setExercise] = useState<string>('2026');
-  const [period, setPeriod] = useState<string>('Août');
+  const [period, setPeriod] = useState<string>('Septembre');
   const [soldeType, setSoldeType] = useState<'THEORIQUE' | 'COMPTABLE'>('THEORIQUE');
   const [filterExcludeZero, setFilterExcludeZero] = useState<boolean>(false);
   const [showBiometricSuccess, setShowBiometricSuccess] = useState<boolean>(false);
   const [showCardModal, setShowCardModal] = useState<boolean>(false);
 
   useEffect(() => {
-    const list = StorageService.getMembers();
-    setMembers(list);
-    if (list.length > 0) {
-      const found = list.find(m => m.code === 'A0200225') || list[0];
-      setSelectedMember(found);
-      setSearchQuery(found.code);
-    }
+    CoreBankingApi.getMembers()
+      .then(apiMems => {
+        if (apiMems && apiMems.length > 0) {
+          const mapped: Member[] = apiMems.map(m => ({
+            code: m.code,
+            manualNumber: m.manual_number || m.code,
+            fullName: m.full_name,
+            birthDate: m.birth_date || '',
+            registrationDate: m.registration_date,
+            address: m.address,
+            city: m.city,
+            phone: m.phone,
+            spouseName: '',
+            sharesPurchased: m.shares_purchased * m.share_unit_price,
+            sharesSold: 0,
+            sharesAvailable: (m.shares_purchased - m.shares_non_liberated) * m.share_unit_price,
+            shareUnitPrice: m.share_unit_price,
+            status: m.status === 'ACTIVE' ? 'ACTIF' : 'SUSPENDU',
+            fingerprintEnrolled: false
+          }));
+          setMembers(mapped);
+          setSelectedMember(mapped[0]);
+          setSearchQuery(mapped[0].code);
+        } else {
+          const list = StorageService.getMembers();
+          setMembers(list);
+          if (list.length > 0) {
+            setSelectedMember(list[0]);
+            setSearchQuery(list[0].code);
+          }
+        }
+      })
+      .catch(() => {
+        const list = StorageService.getMembers();
+        setMembers(list);
+        if (list.length > 0) {
+          setSelectedMember(list[0]);
+          setSearchQuery(list[0].code);
+        }
+      });
   }, []);
+
+  useEffect(() => {
+    if (!selectedMember) return;
+    CoreBankingApi.getMemberDetails(selectedMember.code)
+      .then(details => {
+        setMemberAccounts(details.accounts || []);
+        setMemberLoans(details.loans || []);
+        setSavingsLock(details.savingsLock || null);
+      })
+      .catch(e => {
+        console.warn('Could not load member details from backend:', e);
+      });
+  }, [selectedMember?.code]);
 
   const handleSearch = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -107,18 +158,21 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
     );
   }
 
-  // Account lines for the selected member (matching core banking Syscoa schema)
+  // Account lines for the selected member (from real SQLite backend)
   const memberCode = selectedMember.code;
-  const accountsData = [
-    { number: `20221210${memberCode}01`, product: 'CREDITS ORDINAIRES (001)', real: 0, frozen: 0, available: 0, status: 'ACTIF' },
-    { number: `20312550${memberCode}01`, product: 'CREDIT AU PERSONNEL (002)', real: 0, frozen: 0, available: 0, status: 'ACTIF' },
-    { number: `20412110${memberCode}01`, product: 'CREDITS ORDINAIRES (001)', real: 0, frozen: 0, available: 0, status: 'ACTIF' },
-    { number: `20412550${memberCode}01`, product: 'CREDIT AU PERSONNEL (002)', real: 5257109, frozen: 0, available: 5257109, status: 'ACTIF' },
-    { number: `25121100${memberCode}01`, product: 'EPARGNE ORDINAIRE (001)', real: 280424, frozen: 0, available: 280424, status: 'ACTIF' },
-    { number: `25121300${memberCode}01`, product: 'Epargne remboursement Crédit/Plan', real: 125839, frozen: 0, available: 125839, status: 'ACTIF' },
-    { number: `25331010${memberCode}01`, product: 'PLAN EPARGNE FIN CARRIERE (003)', real: 0, frozen: 0, available: 0, status: 'ACTIF' },
-    { number: `25331020${memberCode}01`, product: 'PLAN EPARGNE PROJET PLUS (004)', real: 0, frozen: 0, available: 0, status: 'ACTIF' },
-  ];
+  const accountsData = memberAccounts.length > 0
+    ? memberAccounts.map(a => ({
+        number: a.account_number,
+        product: a.product_code === 'EPG_VOLONTAIRE' ? 'EPARGNE ORDINAIRE (001)' : a.product_code === 'PARTS_SOCIALES' ? 'PARTS SOCIALES (101)' : a.product_code,
+        real: a.balance,
+        frozen: a.blocked_balance,
+        available: Math.max(0, a.balance - a.blocked_balance),
+        status: a.status === 'ACTIVE' ? 'ACTIF' : 'BLOQUE'
+      }))
+    : [
+        { number: `25121100${memberCode}01`, product: 'EPARGNE ORDINAIRE (001)', real: 0, frozen: 0, available: 0, status: 'ACTIF' },
+        { number: `10110000${memberCode}01`, product: 'PARTS SOCIALES (101)', real: selectedMember.sharesAvailable || 0, frozen: selectedMember.sharesAvailable || 0, available: 0, status: 'ACTIF' }
+      ];
 
   const displayedAccounts = filterExcludeZero 
     ? accountsData.filter(a => a.available > 0)
@@ -176,7 +230,7 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Entrer code adhérent (ex: A0200225), nom, n° manuel..."
+                placeholder="Entrer matricule (ex: 130049), nom..."
                 className="w-full bg-white border border-slate-300 focus:border-slate-800 rounded-xl pl-9 pr-3 py-2.5 font-bold text-slate-900 text-xs focus:outline-none"
               />
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
@@ -245,12 +299,12 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
           <div className="lg:col-span-7 space-y-4">
             <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
               <div>
-                <span className="text-slate-500 block mb-1">Code Adhérent</span>
+                <span className="text-slate-500 block mb-1">Matricule</span>
                 <span className="font-mono font-bold text-slate-900 text-sm">{selectedMember.code}</span>
               </div>
               <div>
                 <span className="text-slate-500 block mb-1">Nom & Prénoms</span>
-                <span className="font-bold text-slate-900 text-sm">{selectedMember.fullName} ({selectedMember.manualNumber || '610'})</span>
+                <span className="font-bold text-slate-900 text-sm">{selectedMember.fullName} (Matricule : {selectedMember.manualNumber || '130049'})</span>
               </div>
               <div>
                 <span className="text-slate-500 block mb-1">Date d'Inscription</span>
@@ -297,8 +351,8 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
 
             <div className="space-y-2 text-xs">
               <div className="flex justify-between">
-                <span className="text-slate-500">N° Manuel :</span>
-                <span className="font-mono font-bold text-slate-900">{selectedMember.manualNumber || '610'}</span>
+                <span className="text-slate-500">Matricule :</span>
+                <span className="font-mono font-bold text-slate-900">{selectedMember.manualNumber || '130049'}</span>
               </div>
 
               <div className="flex justify-between">
@@ -395,15 +449,15 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
           </button>
 
           <button
-            onClick={() => setActiveTab('cheques')}
-            style={activeTab === 'cheques' ? { borderTopColor: theme.primaryAccent, color: theme.primaryAccent, borderTopWidth: '3px' } : {}}
+            onClick={() => setActiveTab('prelevements')}
+            style={activeTab === 'prelevements' ? { borderTopColor: theme.primaryAccent, color: theme.primaryAccent, borderTopWidth: '3px' } : {}}
             className={`py-3.5 px-6 border-r border-slate-200 transition-all ${
-              activeTab === 'cheques'
+              activeTab === 'prelevements'
                 ? 'bg-white shadow-sm font-bold'
                 : 'hover:bg-slate-200/60'
             }`}
           >
-            Situation des remises de chèques
+            Prélèvements
           </button>
 
           <button
@@ -496,29 +550,67 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
           </div>
         )}
 
-        {/* Tab Content 2: Remises de Chèques */}
-        {activeTab === 'cheques' && (
+        {/* Tab Content 2: Prélèvements à la source (Paie ASECNA) */}
+        {activeTab === 'prelevements' && (
           <div className="p-6 space-y-4 text-xs">
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-3.5 flex items-center gap-3 text-blue-950">
+              <Building2 className="w-5 h-5 text-blue-700 shrink-0" />
+              <div>
+                <span className="font-bold block text-sm">Paiements par prélèvement</span>
+                <span className="text-slate-600 text-xs">
+                  Les cotisations, épargnes et remboursements de crédits de l'adhérent (Matricule {selectedMember.manualNumber || selectedMember.code}) sont directement prélevés chaque fin de mois.
+                </span>
+              </div>
+            </div>
+
             <div className="overflow-x-auto rounded-xl border border-slate-200">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
                   <tr className="border-b border-slate-200 bg-slate-50 text-slate-600 font-bold uppercase tracking-wider">
-                    <th className="py-3 px-4">N° Chèque</th>
-                    <th className="py-3 px-4">Banque Tirée</th>
-                    <th className="py-3 px-4">Émetteur</th>
-                    <th className="py-3 px-4 text-right">Montant (F.CFA)</th>
-                    <th className="py-3 px-4 text-center">Date Compensation</th>
-                    <th className="py-3 px-4 text-center">Statut</th>
+                    <th className="py-3 px-4">Période Paie</th>
+                    <th className="py-3 px-4">Matricule</th>
+                    <th className="py-3 px-4">Rubrique Prélevée</th>
+                    <th className="py-3 px-4 text-right">Montant Prélevé (F.CFA)</th>
+                    <th className="py-3 px-4 text-center">Date Retenue DRH</th>
+                    <th className="py-3 px-4 text-center">Statut Intégration</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-slate-800">
-                  <tr>
-                    <td className="py-3 px-4 font-mono font-bold">CHQ-881902</td>
-                    <td className="py-3 px-4 font-semibold">ECOBANK TOGO</td>
-                    <td className="py-3 px-4">KODJO Koffi</td>
-                    <td className="py-3 px-4 text-right font-mono font-bold">350 000 F</td>
-                    <td className="py-3 px-4 text-center font-mono">22/08/2026</td>
-                    <td className="py-3 px-4 text-center font-bold text-emerald-800">ENCAISSÉ</td>
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="py-3 px-4 font-bold text-slate-900">Août 2026</td>
+                    <td className="py-3 px-4 font-mono font-bold">{selectedMember.manualNumber || selectedMember.code}</td>
+                    <td className="py-3 px-4 font-semibold">Remboursement Mensualité Crédit (002)</td>
+                    <td className="py-3 px-4 text-right font-mono font-bold text-slate-900">272 800 F</td>
+                    <td className="py-3 px-4 text-center font-mono">25/08/2026</td>
+                    <td className="py-3 px-4 text-center">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        PRÉLEVÉ & INTÉGRÉ
+                      </span>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="py-3 px-4 font-bold text-slate-900">Août 2026</td>
+                    <td className="py-3 px-4 font-mono font-bold">{selectedMember.manualNumber || selectedMember.code}</td>
+                    <td className="py-3 px-4 font-semibold">Cotisation Épargne Volontaire (001)</td>
+                    <td className="py-3 px-4 text-right font-mono font-bold text-slate-900">50 000 F</td>
+                    <td className="py-3 px-4 text-center font-mono">25/08/2026</td>
+                    <td className="py-3 px-4 text-center">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        PRÉLEVÉ & INTÉGRÉ
+                      </span>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-slate-50 transition-colors">
+                    <td className="py-3 px-4 font-bold text-slate-900">Juillet 2026</td>
+                    <td className="py-3 px-4 font-mono font-bold">{selectedMember.manualNumber || selectedMember.code}</td>
+                    <td className="py-3 px-4 font-semibold">Remboursement Mensualité Crédit (002)</td>
+                    <td className="py-3 px-4 text-right font-mono font-bold text-slate-900">272 800 F</td>
+                    <td className="py-3 px-4 text-center font-mono">25/07/2026</td>
+                    <td className="py-3 px-4 text-center">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        PRÉLEVÉ & INTÉGRÉ
+                      </span>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -542,14 +634,28 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-slate-800 font-medium">
-                  <tr>
-                    <td className="py-3.5 px-4 font-mono font-bold">CRE-2026-001</td>
-                    <td className="py-3.5 px-4 font-semibold">Crédit Équipement & Rénovation</td>
-                    <td className="py-3.5 px-4 text-right font-mono">6 000 000 F</td>
-                    <td className="py-3.5 px-4 text-right font-mono font-bold text-slate-900 text-sm">5 257 109 F</td>
-                    <td className="py-3.5 px-4 text-right font-mono font-bold text-emerald-800">120 000 F</td>
-                    <td className="py-3.5 px-4 text-center font-bold text-emerald-800">EN COURS (SAIN)</td>
-                  </tr>
+                  {memberLoans.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="py-6 text-center text-slate-400">
+                        Aucun dossier de crédit enregistré pour ce sociétaire.
+                      </td>
+                    </tr>
+                  ) : (
+                    memberLoans.map((loan: any) => (
+                      <tr key={loan.id || loan.loan_number} className="hover:bg-slate-50 transition-colors">
+                        <td className="py-3.5 px-4 font-mono font-bold text-slate-900">{loan.loan_number}</td>
+                        <td className="py-3.5 px-4 font-semibold">{loan.product_name || loan.purpose}</td>
+                        <td className="py-3.5 px-4 text-right font-mono">{Number(loan.amount).toLocaleString('fr-FR')} F</td>
+                        <td className="py-3.5 px-4 text-right font-mono font-bold text-slate-900">{Number(loan.amount).toLocaleString('fr-FR')} F</td>
+                        <td className="py-3.5 px-4 text-right font-mono font-bold text-emerald-800">{Number(loan.monthly_payment).toLocaleString('fr-FR')} F</td>
+                        <td className="py-3.5 px-4 text-center">
+                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
+                            {loan.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -565,29 +671,41 @@ export const MemberAccountStatus: React.FC<MemberAccountStatusProps> = () => {
           </div>
         )}
 
-        {/* Tab Content 5: Plan Épargne */}
+        {/* Tab Content 5: Plan Épargne & Blocage Volontaire */}
         {activeTab === 'plan_epargne' && (
           <div className="p-6 space-y-4 text-xs">
-            <div className="overflow-x-auto rounded-xl border border-slate-200">
-              <table className="w-full text-left border-collapse text-xs">
-                <thead>
-                  <tr className="border-b border-slate-200 bg-slate-50 text-slate-600 font-bold uppercase tracking-wider">
-                    <th className="py-3 px-4">Intitulé du Plan</th>
-                    <th className="py-3 px-4 text-right">Montant Cumulé</th>
-                    <th className="py-3 px-4 text-right">Retenue Mensuelle</th>
-                    <th className="py-3 px-4 text-center">Échéance</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 text-slate-800 font-medium">
-                  <tr>
-                    <td className="py-3.5 px-4 font-bold">Plan Épargne Fin de Carrière</td>
-                    <td className="py-3.5 px-4 text-right font-mono font-bold text-emerald-900">125 839 F</td>
-                    <td className="py-3.5 px-4 text-right font-mono">25 000 F / mois</td>
-                    <td className="py-3.5 px-4 text-center font-mono">Retraite (2038)</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            {savingsLock ? (
+              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-emerald-950 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-sm">Blocage Volontaire d'Épargne Actif</span>
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-200 text-emerald-800 border border-emerald-300">
+                    CONTRAT EN COURS
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                  <div>
+                    <span className="text-slate-500 block text-[10px]">Montant Bloqué</span>
+                    <span className="font-mono font-bold text-base text-emerald-900">{Number(savingsLock.blocked_amount).toLocaleString('fr-FR')} F</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-500 block text-[10px]">Pourcentage Bloqué</span>
+                    <span className="font-bold text-sm">{savingsLock.percentage}%</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-500 block text-[10px]">Durée</span>
+                    <span className="font-bold text-sm">{savingsLock.duration_months} mois</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-500 block text-[10px]">Échéance de Déblocage</span>
+                    <span className="font-mono font-bold text-sm">{savingsLock.until_date ? savingsLock.until_date.slice(0, 10) : 'N/A'}</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="p-6 bg-slate-50 rounded-xl border border-slate-200 text-slate-500 text-center">
+                Aucun plan de blocage volontaire d'épargne actif pour ce sociétaire.
+              </div>
+            )}
           </div>
         )}
       </div>

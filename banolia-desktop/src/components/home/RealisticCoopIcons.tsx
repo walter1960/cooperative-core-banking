@@ -557,3 +557,109 @@ export const RealisticPrelevementsIcon: React.FC<{ className?: string }> = ({ cl
     </g>
   </svg>
 );
+
+// 9. Formulaires : Document officiel avec tampon de délibération rouge/or et sceau institutionnel
+export const RealisticFormulairesIcon: React.FC<{ className?: string }> = ({ className = 'w-24 h-24' }) => (
+  <svg viewBox="0 0 120 120" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="formShadow" x="-10%" y="-10%" width="130%" height="130%" filterUnits="userSpaceOnUse">
+        <feDropShadow dx="2" dy="4" stdDeviation="3" floodOpacity="0.25" />
+      </filter>
+      <linearGradient id="docGrad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#ffffff" />
+        <stop offset="100%" stopColor="#f1f5f9" />
+      </linearGradient>
+      <linearGradient id="stampGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#b91c1c" />
+        <stop offset="100%" stopColor="#991b1b" />
+      </linearGradient>
+    </defs>
+
+    {/* Back document */}
+    <rect x="22" y="12" width="76" height="96" rx="6" fill="#e2e8f0" stroke="#cbd5e1" strokeWidth="1" filter="url(#formShadow)" />
+    
+    {/* Main Official Document Sheet */}
+    <rect x="18" y="16" width="76" height="92" rx="5" fill="url(#docGrad)" stroke="#94a3b8" strokeWidth="1.2" filter="url(#formShadow)" />
+    
+    {/* Header banner & lines */}
+    <rect x="26" y="24" width="30" height="4" rx="1" fill="#0f172a" />
+    <rect x="26" y="31" width="45" height="2" rx="1" fill="#64748b" />
+    <rect x="26" y="35" width="38" height="2" rx="1" fill="#94a3b8" />
+
+    {/* Table simulation */}
+    <rect x="26" y="44" width="60" height="28" rx="3" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1" />
+    <line x1="26" y1="52" x2="86" y2="52" stroke="#e2e8f0" strokeWidth="1" />
+    <line x1="26" y1="60" x2="86" y2="60" stroke="#e2e8f0" strokeWidth="1" />
+    <line x1="56" y1="44" x2="56" y2="72" stroke="#e2e8f0" strokeWidth="1" />
+
+    {/* Official Red Stamp (Approuvé / COOPECTAT) */}
+    <g transform="translate(56, 68) rotate(-12)">
+      <rect x="0" y="0" width="40" height="24" rx="4" fill="none" stroke="#dc2626" strokeWidth="2.5" strokeDasharray="3 1" />
+      <rect x="3" y="3" width="34" height="18" rx="2" fill="none" stroke="#ef4444" strokeWidth="1" />
+      <text x="20" y="15" fill="#dc2626" fontSize="8" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">
+        APPROUVÉ
+      </text>
+    </g>
+
+    {/* Signatures simulation */}
+    <line x1="26" y1="88" x2="48" y2="88" stroke="#334155" strokeWidth="1.5" strokeLinecap="round" />
+    <line x1="26" y1="92" x2="40" y2="92" stroke="#94a3b8" strokeWidth="1" strokeLinecap="round" />
+  </svg>
+);
+
+// 10. Demandes Mobiles : Smartphone moderne avec onde réseau et notification de crédit
+export const RealisticMobileRequestsIcon: React.FC<{ className?: string }> = ({ className = 'w-24 h-24' }) => (
+  <svg viewBox="0 0 120 120" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="phoneShadow" x="-10%" y="-10%" width="130%" height="130%" filterUnits="userSpaceOnUse">
+        <feDropShadow dx="3" dy="5" stdDeviation="4" floodOpacity="0.3" />
+      </filter>
+      <linearGradient id="phoneBody" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#1e293b" />
+        <stop offset="100%" stopColor="#0f172a" />
+      </linearGradient>
+      <linearGradient id="phoneScreen" x1="0" y1="0" x2="0" y2="100" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#0284c7" />
+        <stop offset="100%" stopColor="#0369a1" />
+      </linearGradient>
+      <linearGradient id="badgeGrad" x1="0" y1="0" x2="20" y2="20" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#10b981" />
+        <stop offset="100%" stopColor="#059669" />
+      </linearGradient>
+    </defs>
+
+    {/* Phone Body */}
+    <rect x="32" y="14" width="56" height="92" rx="12" fill="url(#phoneBody)" stroke="#475569" strokeWidth="1.5" filter="url(#phoneShadow)" />
+    
+    {/* Screen */}
+    <rect x="36" y="20" width="48" height="80" rx="8" fill="url(#phoneScreen)" />
+
+    {/* Dynamic Island / Speaker */}
+    <rect x="52" y="17" width="16" height="3" rx="1.5" fill="#334155" />
+
+    {/* Screen App Interface */}
+    <rect x="40" y="26" width="22" height="4" rx="2" fill="#ffffff" opacity="0.9" />
+    <circle cx="78" cy="28" r="3" fill="#38bdf8" />
+
+    {/* Incoming Transfer Card on Phone Screen */}
+    <rect x="40" y="36" width="40" height="28" rx="5" fill="#ffffff" />
+    <rect x="44" y="41" width="18" height="3" rx="1" fill="#0f172a" />
+    <rect x="44" y="46" width="32" height="2" rx="1" fill="#94a3b8" />
+    <rect x="44" y="52" width="24" height="6" rx="2" fill="#dcfce7" />
+    <text x="56" y="57" fill="#15803d" fontSize="5" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">+1 500 000 F</text>
+
+    {/* Quick Action Rows */}
+    <rect x="40" y="70" width="40" height="6" rx="3" fill="#ffffff" opacity="0.2" />
+    <rect x="40" y="80" width="40" height="6" rx="3" fill="#ffffff" opacity="0.2" />
+
+    {/* Home indicator bar */}
+    <rect x="50" y="95" width="20" height="2" rx="1" fill="#ffffff" opacity="0.7" />
+
+    {/* Floating Live Signal / Notification Badge */}
+    <g transform="translate(68, 10)">
+      <circle cx="16" cy="16" r="14" fill="url(#badgeGrad)" stroke="#ffffff" strokeWidth="2" filter="url(#phoneShadow)" />
+      <path d="M12 16L15 19L21 13" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </g>
+  </svg>
+);
+

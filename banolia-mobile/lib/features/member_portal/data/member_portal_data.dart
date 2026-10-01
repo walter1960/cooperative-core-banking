@@ -214,7 +214,7 @@ class AccountRepositoryImpl implements IAccountRepository {
 
   @override
   Future<TripleBalance> getAccountBalances(String accountId) async {
-    final accounts = await getMemberAccounts('A0200389');
+    final accounts = await getMemberAccounts('130049');
     final match = accounts.firstWhere((a) => a.id == accountId, orElse: () => accounts.first);
     return match.balance;
   }
@@ -238,28 +238,28 @@ class TransactionRepositoryImpl implements ITransactionRepository {
       TransactionModel(
         id: 'tx-001',
         receiptNumber: 'REC-20260820-001',
-        accountNumber: '251100A020038901',
-        memberCode: 'A0200389',
+        accountNumber: '25110013004901',
+        memberCode: '130049',
         type: TransactionType.deposit,
         amount: const Money(50000),
         feeAmount: Money.zero,
-        paymentMethod: PaymentMethod.tmoney,
-        description: 'Rechargement TMoney',
+        paymentMethod: PaymentMethod.cash,
+        description: 'Prélèvement (Août 2026)',
         timestamp: now.subtract(const Duration(hours: 2)),
         idempotencyKey: 'idemp-tx-001',
-        remoteReference: 'TM992817',
+        remoteReference: 'PAIE-ASECNA-2026-08',
         isCredit: true,
       ),
       TransactionModel(
         id: 'tx-002',
         receiptNumber: 'REC-20260819-014',
-        accountNumber: '251100A020038901',
-        memberCode: 'A0200389',
+        accountNumber: '25110013004901',
+        memberCode: '130049',
         type: TransactionType.tontineCotisation,
         amount: const Money(2000),
         feeAmount: Money.zero,
         paymentMethod: PaymentMethod.cash,
-        description: 'Cotisation Tontine Terrain (2 jours)',
+        description: 'Prélèvement Cotisation Tontine',
         timestamp: now.subtract(const Duration(days: 1)),
         idempotencyKey: 'idemp-tx-002',
         isCredit: true,
@@ -267,13 +267,13 @@ class TransactionRepositoryImpl implements ITransactionRepository {
       TransactionModel(
         id: 'tx-003',
         receiptNumber: 'REC-20260815-089',
-        accountNumber: '251100A020038901',
-        memberCode: 'A0200389',
+        accountNumber: '25110013004901',
+        memberCode: '130049',
         type: TransactionType.withdrawal,
         amount: const Money(20000),
         feeAmount: const Money(200),
-        paymentMethod: PaymentMethod.wave,
-        description: 'Retrait Wave Cash-out',
+        paymentMethod: PaymentMethod.cash,
+        description: 'Retrait Guichet Agence Siège',
         timestamp: now.subtract(const Duration(days: 5)),
         idempotencyKey: 'idemp-tx-003',
         isCredit: false,
@@ -295,8 +295,8 @@ class TransactionRepositoryImpl implements ITransactionRepository {
     final transactions = await getTransactionHistory(accountId: accountId, dateRange: period);
     final account = AccountModel(
       id: accountId,
-      accountNumber: '251100A020038901',
-      memberCode: 'A0200389',
+      accountNumber: '25110013004901',
+      memberCode: '130049',
       productCode: '251100',
       productName: 'Compte Épargne Ordinaire',
       accountType: AccountType.savingsOrdinary,
